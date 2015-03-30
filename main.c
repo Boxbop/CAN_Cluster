@@ -1,3 +1,9 @@
+/*
+차량용 CAN 통신 계기판 제어 코드
+*/
+
+
+
 #include <avr/io.h>
 #include <stdio.h>
 #include <util/delay.h>

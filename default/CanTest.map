@@ -391,14 +391,14 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  .debug_frame   0x00000050       0x90 usartLib.o
  .debug_frame   0x000000e0       0x60 mycanlib.o
 
-.debug_str      0x00000000      0x1df
+.debug_str      0x00000000      0x1d4
  *(.debug_str)
- .debug_str     0x00000000       0xcc main.o
-                                0x105 (size before relaxing)
- .debug_str     0x000000cc       0x92 usartLib.o
-                                0x144 (size before relaxing)
- .debug_str     0x0000015e       0x81 mycanlib.o
-                                0x133 (size before relaxing)
+ .debug_str     0x00000000       0xc1 main.o
+                                 0xfa (size before relaxing)
+ .debug_str     0x000000c1       0x92 usartLib.o
+                                0x139 (size before relaxing)
+ .debug_str     0x00000153       0x81 mycanlib.o
+                                0x128 (size before relaxing)
 
 .debug_loc      0x00000000      0x413
  *(.debug_loc)
