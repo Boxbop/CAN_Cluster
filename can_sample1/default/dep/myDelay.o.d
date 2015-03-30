@@ -1,1 +1,0 @@
-myDelay.o: ../myDelay.c

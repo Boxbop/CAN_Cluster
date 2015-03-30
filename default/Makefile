@@ -6,7 +6,7 @@
 PROJECT = CanTest
 MCU = at90can128
 TARGET = CanTest.elf
-CC = 
+CC = avr-gcc
 
 CPP = avr-g++
 

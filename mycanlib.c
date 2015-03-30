@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 #include "myCANLib.h"
 //#include "lcdControl.h"
@@ -160,7 +161,34 @@ char can_tx (unsigned char obj, struct MOb *msg, char rtr)	// CAN transmission
 	//enable transmission		
 	CANCDMOB |= (1<<CONMOB0);
 
-	while (!(CANSTMOB & (1<<TXOK)));	// check tx ok
+
+	//_delay_ms(10);
+	//PORTE=0xAA;
+	if(	(CANSTMOB & (1<<TXOK)) )
+	{
+		PORTE=0x00;
+	}
+
+
+//	PORTE=0x00;
+//	while (!(CANSTMOB & (1<<TXOK)))
+//	{
+//		PORTE= (CANSTMOB & (1<<TXOK)) ? 0x00 : 0xff;
+//	}	// check tx ok
+
+
+/*
+	int OnOff = 0;
+	while(1)
+	{	
+
+		OnOff = OnOff ? 0 : 1;
+		PORTE = OnOff ? 0xAA : 0x55;
+		_delay_ms(1000);
+
+	}
+*/
+
 	send_result= _SEND_OK;
 
 	// monitoring with serial com
