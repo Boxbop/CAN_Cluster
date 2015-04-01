@@ -154,14 +154,14 @@ void main()
 	can_init(2);//b500k
   ec:	82 e0       	ldi	r24, 0x02	; 2
   ee:	0e 94 d4 00 	call	0x1a8	; 0x1a8 <can_init>
-//		can_tx(7,&msg_NCR[1],0);
-//		_delay_ms(1);
+//		can_tx(7,&msg_NCR[2],0);
+//		_delay_ms(10);
 
-		//struct MOb msg_NCR2 = { 0x43F,0,STD,8,{0x00,0x40,0x40,0xFF,0x31,0x24,0x0B,0x00}};
-		//단일 메시지 (10ms) -> P단기어 활성
-		can_tx(7,&msg_NCR[2],0);
+		//struct MOb msg_NCR3 = { 0x316,0,STD,8,{0x01,0x23,0x9C,0x0C,0x23,0x1C,0x00,0x7E}};
+		//단일 메시지 (10ms) -> RPM 상승
+		can_tx(7,&msg_NCR[3],0);
   f2:	87 e0       	ldi	r24, 0x07	; 7
-  f4:	67 e7       	ldi	r22, 0x77	; 119
+  f4:	66 e8       	ldi	r22, 0x86	; 134
   f6:	72 e0       	ldi	r23, 0x02	; 2
   f8:	40 e0       	ldi	r20, 0x00	; 0
   fa:	0e 94 39 01 	call	0x272	; 0x272 <can_tx>
