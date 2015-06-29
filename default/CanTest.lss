@@ -3,27 +3,27 @@ CanTest.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000252  00800100  00000822  00000896  2**0
+  0 .data         00000252  00800100  00000800  00000874  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000822  00000000  00000000  00000074  2**1
+  1 .text         00000800  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .debug_aranges 00000060  00000000  00000000  00000ae8  2**0
+  2 .debug_aranges 00000060  00000000  00000000  00000ac6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .debug_pubnames 00000182  00000000  00000000  00000b48  2**0
+  3 .debug_pubnames 00000182  00000000  00000000  00000b26  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   0000061b  00000000  00000000  00000cca  2**0
+  4 .debug_info   000006a1  00000000  00000000  00000ca8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 00000313  00000000  00000000  000012e5  2**0
+  5 .debug_abbrev 00000360  00000000  00000000  00001349  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   000007b5  00000000  00000000  000015f8  2**0
+  6 .debug_line   00000842  00000000  00000000  000016a9  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  00000140  00000000  00000000  00001db0  2**2
+  7 .debug_frame  00000140  00000000  00000000  00001eec  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    000001d4  00000000  00000000  00001ef0  2**0
+  8 .debug_str    00000211  00000000  00000000  0000202c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    00000413  00000000  00000000  000020c4  2**0
+  9 .debug_loc    00000413  00000000  00000000  0000223d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000030  00000000  00000000  000024d7  2**0
+ 10 .debug_ranges 00000078  00000000  00000000  00002650  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -79,7 +79,7 @@ Disassembly of section .text:
   a0:	13 e0       	ldi	r17, 0x03	; 3
   a2:	a0 e0       	ldi	r26, 0x00	; 0
   a4:	b1 e0       	ldi	r27, 0x01	; 1
-  a6:	e2 e2       	ldi	r30, 0x22	; 34
+  a6:	e0 e0       	ldi	r30, 0x00	; 0
   a8:	f8 e0       	ldi	r31, 0x08	; 8
   aa:	00 e0       	ldi	r16, 0x00	; 0
   ac:	0b bf       	out	0x3b, r16	; 59
@@ -90,7 +90,7 @@ Disassembly of section .text:
   b6:	b1 07       	cpc	r27, r17
   b8:	d9 f7       	brne	.-10     	; 0xb0 <__do_copy_data+0x10>
   ba:	0e 94 74 00 	call	0xe8	; 0xe8 <main>
-  be:	0c 94 0f 04 	jmp	0x81e	; 0x81e <_exit>
+  be:	0c 94 fe 03 	jmp	0x7fc	; 0x7fc <_exit>
 
 000000c2 <__bad_interrupt>:
   c2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -144,1292 +144,1265 @@ void breakPoint()
   e6:	fe cf       	rjmp	.-4      	; 0xe4 <breakPoint>
 
 000000e8 <main>:
+	}
 }
 
 void main()
 {
+  e8:	cf 93       	push	r28
+  ea:	df 93       	push	r29
 	char count;
 	initPort();
-  e8:	0e 94 63 00 	call	0xc6	; 0xc6 <initPort>
+  ec:	0e 94 63 00 	call	0xc6	; 0xc6 <initPort>
 	can_init(2);//b500k
-  ec:	82 e0       	ldi	r24, 0x02	; 2
-  ee:	0e 94 ec 00 	call	0x1d8	; 0x1d8 <can_init>
-//		can_tx(7,&msg_NCR[0],0);
-//		_delay_ms(10);
-
-		//struct MOb msg_NCR1 = { 0x440,0,STD,8,{0x00,0x00,0x00,0x04,0xFF,0x2A,0x0B,0x00}};
-		//조합 메시지 -> 속도 상승
-		can_tx(7,&msg_NCR[1],0);
-  f2:	87 e0       	ldi	r24, 0x07	; 7
-  f4:	68 e6       	ldi	r22, 0x68	; 104
-  f6:	72 e0       	ldi	r23, 0x02	; 2
-  f8:	40 e0       	ldi	r20, 0x00	; 0
-  fa:	0e 94 51 01 	call	0x2a2	; 0x2a2 <can_tx>
-//		_delay_ms(1);
-
-		//struct MOb msg_NCR2 = { 0x43F,0,STD,8,{0x00,0x40,0x40,0xFF,0x31,0x24,0x0B,0x00}};
-		//단일 메시지 (10ms) -> P단기어 활성
-		can_tx(7,&msg_NCR[2],0);
-  fe:	87 e0       	ldi	r24, 0x07	; 7
- 100:	67 e7       	ldi	r22, 0x77	; 119
- 102:	72 e0       	ldi	r23, 0x02	; 2
- 104:	40 e0       	ldi	r20, 0x00	; 0
- 106:	0e 94 51 01 	call	0x2a2	; 0x2a2 <can_tx>
-//		_delay_ms(10);
+  f0:	82 e0       	ldi	r24, 0x02	; 2
+  f2:	0e 94 db 00 	call	0x1b6	; 0x1b6 <can_init>
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+  f6:	c2 ee       	ldi	r28, 0xE2	; 226
+  f8:	d4 e0       	ldi	r29, 0x04	; 4
+		//can_tx(7,&msg_NCR[2],0);
+		//_delay_ms(10);
 
 		//struct MOb msg_NCR3 = { 0x316,0,STD,8,{0x01,0x23,0x9C,0x0C,0x23,0x1C,0x00,0x7E}};
 		//단일 메시지 (10ms) -> RPM 상승
 		can_tx(7,&msg_NCR[3],0);
- 10a:	87 e0       	ldi	r24, 0x07	; 7
- 10c:	66 e8       	ldi	r22, 0x86	; 134
- 10e:	72 e0       	ldi	r23, 0x02	; 2
- 110:	40 e0       	ldi	r20, 0x00	; 0
- 112:	0e 94 51 01 	call	0x2a2	; 0x2a2 <can_tx>
-//		_delay_ms(10);
+  fa:	87 e0       	ldi	r24, 0x07	; 7
+  fc:	66 e8       	ldi	r22, 0x86	; 134
+  fe:	72 e0       	ldi	r23, 0x02	; 2
+ 100:	40 e0       	ldi	r20, 0x00	; 0
+ 102:	0e 94 40 01 	call	0x280	; 0x280 <can_tx>
+ 106:	ce 01       	movw	r24, r28
+ 108:	01 97       	sbiw	r24, 0x01	; 1
+ 10a:	f1 f7       	brne	.-4      	; 0x108 <main+0x20>
+ 10c:	f6 cf       	rjmp	.-20     	; 0xfa <main+0x12>
 
-		//struct MOb msg_NCR4 = { 0x280,0,STD,8,{0x21,0x0D,0x84,0x95,0x19,0x1B,0x4B,0x2E}};
-		//3번째 데이터 바이트 조절 -> 속도 값 조절 가능 (조합메시지)
-		can_tx(7,&msg_NCR[4],0);
- 116:	87 e0       	ldi	r24, 0x07	; 7
- 118:	65 e9       	ldi	r22, 0x95	; 149
- 11a:	72 e0       	ldi	r23, 0x02	; 2
- 11c:	40 e0       	ldi	r20, 0x00	; 0
- 11e:	0e 94 51 01 	call	0x2a2	; 0x2a2 <can_tx>
-//		can_tx(7,&msg_NCR[5],0);
-//		_delay_ms(10);
-
-		//struct MOb msg_NCR6 = { 0x329,0,STD,8,{0x86,0x95,0x7D,0x04,0x04,0x20,0xFF,0x14}};
-		//단일 메시지 (10ms) -> 수온 게이지 3칸 활성
-		can_tx(7,&msg_NCR[6],0);
- 122:	87 e0       	ldi	r24, 0x07	; 7
- 124:	63 eb       	ldi	r22, 0xB3	; 179
- 126:	72 e0       	ldi	r23, 0x02	; 2
- 128:	40 e0       	ldi	r20, 0x00	; 0
- 12a:	0e 94 51 01 	call	0x2a2	; 0x2a2 <can_tx>
- 12e:	e1 cf       	rjmp	.-62     	; 0xf2 <main+0xa>
-
-00000130 <usart1_init>:
+0000010e <usart1_init>:
 #define CPU_CLOCK_HZ	16000000
 #define BAUDRATE0 2000
 //USART 1 =======================================USART 1
 void usart1_init(void)
 {
 	UCSR1A=0x00;
- 130:	10 92 c8 00 	sts	0x00C8, r1
+ 10e:	10 92 c8 00 	sts	0x00C8, r1
 	UCSR1B=0x98;
- 134:	88 e9       	ldi	r24, 0x98	; 152
- 136:	80 93 c9 00 	sts	0x00C9, r24
+ 112:	88 e9       	ldi	r24, 0x98	; 152
+ 114:	80 93 c9 00 	sts	0x00C9, r24
 	UCSR1C=0x06;
- 13a:	86 e0       	ldi	r24, 0x06	; 6
- 13c:	80 93 ca 00 	sts	0x00CA, r24
+ 118:	86 e0       	ldi	r24, 0x06	; 6
+ 11a:	80 93 ca 00 	sts	0x00CA, r24
 	UBRR1H=0x00;
- 140:	10 92 cd 00 	sts	0x00CD, r1
+ 11e:	10 92 cd 00 	sts	0x00CD, r1
 	UBRR1L=CPU_CLOCK_HZ/BAUDRATE0/16-1;
- 144:	83 ef       	ldi	r24, 0xF3	; 243
- 146:	80 93 cc 00 	sts	0x00CC, r24
+ 122:	83 ef       	ldi	r24, 0xF3	; 243
+ 124:	80 93 cc 00 	sts	0x00CC, r24
 }
- 14a:	08 95       	ret
+ 128:	08 95       	ret
 
-0000014c <usart1_receive>:
+0000012a <usart1_receive>:
 
 /* Read and write functions */
 unsigned char usart1_receive( void )
 {
 	/* Wait for incomming data */
 	while ( !(UCSR1A & (1<<RXC1)) );			                
- 14c:	80 91 c8 00 	lds	r24, 0x00C8
- 150:	87 ff       	sbrs	r24, 7
- 152:	fc cf       	rjmp	.-8      	; 0x14c <usart1_receive>
+ 12a:	80 91 c8 00 	lds	r24, 0x00C8
+ 12e:	87 ff       	sbrs	r24, 7
+ 130:	fc cf       	rjmp	.-8      	; 0x12a <usart1_receive>
 	/* Return the data */
 	return UDR1;
- 154:	80 91 ce 00 	lds	r24, 0x00CE
+ 132:	80 91 ce 00 	lds	r24, 0x00CE
 }
- 158:	08 95       	ret
+ 136:	08 95       	ret
 
-0000015a <usart1_transmit>:
+00000138 <usart1_transmit>:
 
 void usart1_transmit( unsigned char data )
 {
- 15a:	98 2f       	mov	r25, r24
+ 138:	98 2f       	mov	r25, r24
 	/* Wait for empty transmit buffer */
 	while ( !(UCSR1A & (1<<UDRE1)) ); 			                
- 15c:	80 91 c8 00 	lds	r24, 0x00C8
- 160:	85 ff       	sbrs	r24, 5
- 162:	fc cf       	rjmp	.-8      	; 0x15c <usart1_transmit+0x2>
+ 13a:	80 91 c8 00 	lds	r24, 0x00C8
+ 13e:	85 ff       	sbrs	r24, 5
+ 140:	fc cf       	rjmp	.-8      	; 0x13a <usart1_transmit+0x2>
 	/* Start transmittion */
 	UDR1 = data; 			        
- 164:	90 93 ce 00 	sts	0x00CE, r25
+ 142:	90 93 ce 00 	sts	0x00CE, r25
 }
- 168:	08 95       	ret
+ 146:	08 95       	ret
 
-0000016a <usart1_transmit_string>:
+00000148 <usart1_transmit_string>:
 
 void usart1_transmit_string(char* p){
- 16a:	fc 01       	movw	r30, r24
- 16c:	07 c0       	rjmp	.+14     	; 0x17c <usart1_transmit_string+0x12>
+ 148:	fc 01       	movw	r30, r24
+ 14a:	07 c0       	rjmp	.+14     	; 0x15a <usart1_transmit_string+0x12>
 }
 
 void usart1_transmit( unsigned char data )
 {
 	/* Wait for empty transmit buffer */
 	while ( !(UCSR1A & (1<<UDRE1)) ); 			                
- 16e:	80 91 c8 00 	lds	r24, 0x00C8
- 172:	85 ff       	sbrs	r24, 5
- 174:	fc cf       	rjmp	.-8      	; 0x16e <usart1_transmit_string+0x4>
+ 14c:	80 91 c8 00 	lds	r24, 0x00C8
+ 150:	85 ff       	sbrs	r24, 5
+ 152:	fc cf       	rjmp	.-8      	; 0x14c <usart1_transmit_string+0x4>
 	UDR1 = data; 			        
 }
 
 void usart1_transmit_string(char* p){
 	while (*p)
 		usart1_transmit(*p++);
- 176:	31 96       	adiw	r30, 0x01	; 1
+ 154:	31 96       	adiw	r30, 0x01	; 1
 void usart1_transmit( unsigned char data )
 {
 	/* Wait for empty transmit buffer */
 	while ( !(UCSR1A & (1<<UDRE1)) ); 			                
 	/* Start transmittion */
 	UDR1 = data; 			        
- 178:	90 93 ce 00 	sts	0x00CE, r25
+ 156:	90 93 ce 00 	sts	0x00CE, r25
 }
 
 void usart1_transmit_string(char* p){
 	while (*p)
- 17c:	90 81       	ld	r25, Z
- 17e:	99 23       	and	r25, r25
- 180:	b1 f7       	brne	.-20     	; 0x16e <usart1_transmit_string+0x4>
+ 15a:	90 81       	ld	r25, Z
+ 15c:	99 23       	and	r25, r25
+ 15e:	b1 f7       	brne	.-20     	; 0x14c <usart1_transmit_string+0x4>
 		usart1_transmit(*p++);
 }
- 182:	08 95       	ret
+ 160:	08 95       	ret
 
-00000184 <usart0_init>:
+00000162 <usart0_init>:
 
 //USART 0 =======================================USART 0
 void usart0_init(void)
 {
 	UCSR0A=0x00;
- 184:	10 92 c0 00 	sts	0x00C0, r1
+ 162:	10 92 c0 00 	sts	0x00C0, r1
 	UCSR0B=0x98;
- 188:	88 e9       	ldi	r24, 0x98	; 152
- 18a:	80 93 c1 00 	sts	0x00C1, r24
+ 166:	88 e9       	ldi	r24, 0x98	; 152
+ 168:	80 93 c1 00 	sts	0x00C1, r24
 	UCSR0C=0x06;
- 18e:	86 e0       	ldi	r24, 0x06	; 6
- 190:	80 93 c2 00 	sts	0x00C2, r24
+ 16c:	86 e0       	ldi	r24, 0x06	; 6
+ 16e:	80 93 c2 00 	sts	0x00C2, r24
 	UBRR0H=0x00;
- 194:	10 92 c5 00 	sts	0x00C5, r1
+ 172:	10 92 c5 00 	sts	0x00C5, r1
 	UBRR0L=CPU_CLOCK_HZ/BAUDRATE0/16-1;			// 9600 bps
- 198:	83 ef       	ldi	r24, 0xF3	; 243
- 19a:	80 93 c4 00 	sts	0x00C4, r24
+ 176:	83 ef       	ldi	r24, 0xF3	; 243
+ 178:	80 93 c4 00 	sts	0x00C4, r24
 }
- 19e:	08 95       	ret
+ 17c:	08 95       	ret
 
-000001a0 <usart0_receive>:
+0000017e <usart0_receive>:
 
 /* Read and write functions */
 unsigned char usart0_receive( void )
 {
 	/* Wait for incomming data */
 	while ( !(UCSR0A & (1<<RXC0)) );			                
- 1a0:	80 91 c0 00 	lds	r24, 0x00C0
- 1a4:	87 ff       	sbrs	r24, 7
- 1a6:	fc cf       	rjmp	.-8      	; 0x1a0 <usart0_receive>
+ 17e:	80 91 c0 00 	lds	r24, 0x00C0
+ 182:	87 ff       	sbrs	r24, 7
+ 184:	fc cf       	rjmp	.-8      	; 0x17e <usart0_receive>
 	/* Return the data */
 	return UDR0;
- 1a8:	80 91 c6 00 	lds	r24, 0x00C6
+ 186:	80 91 c6 00 	lds	r24, 0x00C6
 }
- 1ac:	08 95       	ret
+ 18a:	08 95       	ret
 
-000001ae <usart0_transmit>:
+0000018c <usart0_transmit>:
 
 void usart0_transmit( unsigned char data )
 {
- 1ae:	98 2f       	mov	r25, r24
+ 18c:	98 2f       	mov	r25, r24
 	/* Wait for empty transmit buffer */
 	while ( !(UCSR0A & (1<<UDRE0)) ); 			                
- 1b0:	80 91 c0 00 	lds	r24, 0x00C0
- 1b4:	85 ff       	sbrs	r24, 5
- 1b6:	fc cf       	rjmp	.-8      	; 0x1b0 <usart0_transmit+0x2>
+ 18e:	80 91 c0 00 	lds	r24, 0x00C0
+ 192:	85 ff       	sbrs	r24, 5
+ 194:	fc cf       	rjmp	.-8      	; 0x18e <usart0_transmit+0x2>
 	/* Start transmittion */
 	UDR0 = data; 			        
- 1b8:	90 93 c6 00 	sts	0x00C6, r25
+ 196:	90 93 c6 00 	sts	0x00C6, r25
 }
- 1bc:	08 95       	ret
+ 19a:	08 95       	ret
 
-000001be <usart0_transmit_string>:
+0000019c <usart0_transmit_string>:
 
 void usart0_transmit_string(char* p){
- 1be:	fc 01       	movw	r30, r24
- 1c0:	07 c0       	rjmp	.+14     	; 0x1d0 <usart0_transmit_string+0x12>
+ 19c:	fc 01       	movw	r30, r24
+ 19e:	07 c0       	rjmp	.+14     	; 0x1ae <usart0_transmit_string+0x12>
 }
 
 void usart0_transmit( unsigned char data )
 {
 	/* Wait for empty transmit buffer */
 	while ( !(UCSR0A & (1<<UDRE0)) ); 			                
- 1c2:	80 91 c0 00 	lds	r24, 0x00C0
- 1c6:	85 ff       	sbrs	r24, 5
- 1c8:	fc cf       	rjmp	.-8      	; 0x1c2 <usart0_transmit_string+0x4>
+ 1a0:	80 91 c0 00 	lds	r24, 0x00C0
+ 1a4:	85 ff       	sbrs	r24, 5
+ 1a6:	fc cf       	rjmp	.-8      	; 0x1a0 <usart0_transmit_string+0x4>
 	UDR0 = data; 			        
 }
 
 void usart0_transmit_string(char* p){
 	while (*p)
 		usart0_transmit(*p++);
- 1ca:	31 96       	adiw	r30, 0x01	; 1
+ 1a8:	31 96       	adiw	r30, 0x01	; 1
 void usart0_transmit( unsigned char data )
 {
 	/* Wait for empty transmit buffer */
 	while ( !(UCSR0A & (1<<UDRE0)) ); 			                
 	/* Start transmittion */
 	UDR0 = data; 			        
- 1cc:	90 93 c6 00 	sts	0x00C6, r25
+ 1aa:	90 93 c6 00 	sts	0x00C6, r25
 }
 
 void usart0_transmit_string(char* p){
 	while (*p)
- 1d0:	90 81       	ld	r25, Z
- 1d2:	99 23       	and	r25, r25
- 1d4:	b1 f7       	brne	.-20     	; 0x1c2 <usart0_transmit_string+0x4>
+ 1ae:	90 81       	ld	r25, Z
+ 1b0:	99 23       	and	r25, r25
+ 1b2:	b1 f7       	brne	.-20     	; 0x1a0 <usart0_transmit_string+0x4>
 		usart0_transmit(*p++);
 }
- 1d6:	08 95       	ret
+ 1b4:	08 95       	ret
 
-000001d8 <can_init>:
+000001b6 <can_init>:
 // 6. CAN MOb 인터럽트 클리어(CAN MOb 인터럽트 사용하지 않음)
 // 7. CAN 제어기 인에이블 모드 설정 
 // 8. CAN 제어기 동작 확인 후 초기화 완료  									
 //***************************************************************
 void can_init (char baudRate)	// CAN초기화 
 {
- 1d8:	98 2f       	mov	r25, r24
+ 1b6:	98 2f       	mov	r25, r24
 	unsigned char i, j;
 	
 	CANGCON |= (1<<SWRES);	// CAN 제어기 리셋
- 1da:	80 91 d8 00 	lds	r24, 0x00D8
- 1de:	81 60       	ori	r24, 0x01	; 1
- 1e0:	80 93 d8 00 	sts	0x00D8, r24
+ 1b8:	80 91 d8 00 	lds	r24, 0x00D8
+ 1bc:	81 60       	ori	r24, 0x01	; 1
+ 1be:	80 93 d8 00 	sts	0x00D8, r24
 							// CAN General Control Register
   							
 	//보레이트 설정 ==============================================
 	switch(baudRate){
- 1e4:	93 30       	cpi	r25, 0x03	; 3
- 1e6:	a1 f0       	breq	.+40     	; 0x210 <can_init+0x38>
- 1e8:	94 30       	cpi	r25, 0x04	; 4
- 1ea:	28 f4       	brcc	.+10     	; 0x1f6 <can_init+0x1e>
- 1ec:	91 30       	cpi	r25, 0x01	; 1
- 1ee:	51 f0       	breq	.+20     	; 0x204 <can_init+0x2c>
- 1f0:	92 30       	cpi	r25, 0x02	; 2
- 1f2:	e9 f4       	brne	.+58     	; 0x22e <can_init+0x56>
- 1f4:	0a c0       	rjmp	.+20     	; 0x20a <can_init+0x32>
- 1f6:	95 30       	cpi	r25, 0x05	; 5
- 1f8:	79 f0       	breq	.+30     	; 0x218 <can_init+0x40>
- 1fa:	95 30       	cpi	r25, 0x05	; 5
- 1fc:	58 f0       	brcs	.+22     	; 0x214 <can_init+0x3c>
- 1fe:	96 30       	cpi	r25, 0x06	; 6
- 200:	b1 f4       	brne	.+44     	; 0x22e <can_init+0x56>
- 202:	0c c0       	rjmp	.+24     	; 0x21c <can_init+0x44>
+ 1c2:	93 30       	cpi	r25, 0x03	; 3
+ 1c4:	a1 f0       	breq	.+40     	; 0x1ee <can_init+0x38>
+ 1c6:	94 30       	cpi	r25, 0x04	; 4
+ 1c8:	28 f4       	brcc	.+10     	; 0x1d4 <can_init+0x1e>
+ 1ca:	91 30       	cpi	r25, 0x01	; 1
+ 1cc:	51 f0       	breq	.+20     	; 0x1e2 <can_init+0x2c>
+ 1ce:	92 30       	cpi	r25, 0x02	; 2
+ 1d0:	e9 f4       	brne	.+58     	; 0x20c <can_init+0x56>
+ 1d2:	0a c0       	rjmp	.+20     	; 0x1e8 <can_init+0x32>
+ 1d4:	95 30       	cpi	r25, 0x05	; 5
+ 1d6:	79 f0       	breq	.+30     	; 0x1f6 <can_init+0x40>
+ 1d8:	95 30       	cpi	r25, 0x05	; 5
+ 1da:	58 f0       	brcs	.+22     	; 0x1f2 <can_init+0x3c>
+ 1dc:	96 30       	cpi	r25, 0x06	; 6
+ 1de:	b1 f4       	brne	.+44     	; 0x20c <can_init+0x56>
+ 1e0:	0c c0       	rjmp	.+24     	; 0x1fa <can_init+0x44>
 		case b1M:
 			CANBT1= 0x00;
- 204:	10 92 e2 00 	sts	0x00E2, r1
- 208:	0c c0       	rjmp	.+24     	; 0x222 <can_init+0x4a>
+ 1e2:	10 92 e2 00 	sts	0x00E2, r1
+ 1e6:	0c c0       	rjmp	.+24     	; 0x200 <can_init+0x4a>
 			CANBT2= 0x0c;
 			CANBT3= 0x37;
 			break;
 		case b500k:
 			CANBT1= 0x02;
- 20a:	90 93 e2 00 	sts	0x00E2, r25
- 20e:	09 c0       	rjmp	.+18     	; 0x222 <can_init+0x4a>
+ 1e8:	90 93 e2 00 	sts	0x00E2, r25
+ 1ec:	09 c0       	rjmp	.+18     	; 0x200 <can_init+0x4a>
 			CANBT2= 0x0c;
 			CANBT3= 0x37;			
 			break;
 		case b250k:
 			CANBT1= 0x06;	// CAN보레이트 설정 
- 210:	86 e0       	ldi	r24, 0x06	; 6
- 212:	05 c0       	rjmp	.+10     	; 0x21e <can_init+0x46>
+ 1ee:	86 e0       	ldi	r24, 0x06	; 6
+ 1f0:	05 c0       	rjmp	.+10     	; 0x1fc <can_init+0x46>
 			CANBT2= 0x0c;	// bit timing: datasheet 264 (check table)
 			CANBT3= 0x37;	// 250kbps, 16 MHz CPU Clock(0.250usec)
 			break;
 		case b200k:
 			CANBT1= 0x08;
- 214:	88 e0       	ldi	r24, 0x08	; 8
- 216:	03 c0       	rjmp	.+6      	; 0x21e <can_init+0x46>
+ 1f2:	88 e0       	ldi	r24, 0x08	; 8
+ 1f4:	03 c0       	rjmp	.+6      	; 0x1fc <can_init+0x46>
 			CANBT2= 0x0c;
 			CANBT3= 0x37;
 			break;
 		case b125k:
 			CANBT1= 0x0E;
- 218:	8e e0       	ldi	r24, 0x0E	; 14
- 21a:	01 c0       	rjmp	.+2      	; 0x21e <can_init+0x46>
+ 1f6:	8e e0       	ldi	r24, 0x0E	; 14
+ 1f8:	01 c0       	rjmp	.+2      	; 0x1fc <can_init+0x46>
 			CANBT2= 0x0c;
 			CANBT3= 0x37;
 			break;
 		case b100k:
 			CANBT1= 0x12;
- 21c:	82 e1       	ldi	r24, 0x12	; 18
- 21e:	80 93 e2 00 	sts	0x00E2, r24
+ 1fa:	82 e1       	ldi	r24, 0x12	; 18
+ 1fc:	80 93 e2 00 	sts	0x00E2, r24
 			CANBT2= 0x0c;
- 222:	8c e0       	ldi	r24, 0x0C	; 12
- 224:	80 93 e3 00 	sts	0x00E3, r24
+ 200:	8c e0       	ldi	r24, 0x0C	; 12
+ 202:	80 93 e3 00 	sts	0x00E3, r24
 			CANBT3= 0x37;													
- 228:	87 e3       	ldi	r24, 0x37	; 55
- 22a:	80 93 e4 00 	sts	0x00E4, r24
- 22e:	90 e0       	ldi	r25, 0x00	; 0
+ 206:	87 e3       	ldi	r24, 0x37	; 55
+ 208:	80 93 e4 00 	sts	0x00E4, r24
+ 20c:	90 e0       	ldi	r25, 0x00	; 0
 			break;
 	}
 	
 	for(i=0; i<15; i++)		// Reset all MObs
 	{
 		CANPAGE = (i<<4);	// MOBNB3~0
- 230:	89 2f       	mov	r24, r25
- 232:	82 95       	swap	r24
- 234:	80 7f       	andi	r24, 0xF0	; 240
- 236:	80 93 ed 00 	sts	0x00ED, r24
+ 20e:	89 2f       	mov	r24, r25
+ 210:	82 95       	swap	r24
+ 212:	80 7f       	andi	r24, 0xF0	; 240
+ 214:	80 93 ed 00 	sts	0x00ED, r24
 							// MOb Number Select(0~14)
 		CANCDMOB = 0;		// ALL Disable MOb
- 23a:	10 92 ef 00 	sts	0x00EF, r1
+ 218:	10 92 ef 00 	sts	0x00EF, r1
 		CANSTMOB = 0;		// Clear status
- 23e:	10 92 ee 00 	sts	0x00EE, r1
+ 21c:	10 92 ee 00 	sts	0x00EE, r1
 		CANIDT1 = 0;		// Clear ID
- 242:	10 92 f3 00 	sts	0x00F3, r1
+ 220:	10 92 f3 00 	sts	0x00F3, r1
 		CANIDT2 = 0;		// Clear ID
- 246:	10 92 f2 00 	sts	0x00F2, r1
+ 224:	10 92 f2 00 	sts	0x00F2, r1
 		CANIDT3 = 0;		// Clear ID
- 24a:	10 92 f1 00 	sts	0x00F1, r1
+ 228:	10 92 f1 00 	sts	0x00F1, r1
 		CANIDT4 = 0;		// Clear ID
- 24e:	10 92 f0 00 	sts	0x00F0, r1
+ 22c:	10 92 f0 00 	sts	0x00F0, r1
 		CANIDM1 = 0;		// Clear mask
- 252:	10 92 f7 00 	sts	0x00F7, r1
+ 230:	10 92 f7 00 	sts	0x00F7, r1
 		CANIDM2 = 0;		// Clear mask
- 256:	10 92 f6 00 	sts	0x00F6, r1
+ 234:	10 92 f6 00 	sts	0x00F6, r1
 		CANIDM3 = 0;		// Clear mask
- 25a:	10 92 f5 00 	sts	0x00F5, r1
+ 238:	10 92 f5 00 	sts	0x00F5, r1
 		CANIDM4 = 0;		// Clear mask
- 25e:	10 92 f4 00 	sts	0x00F4, r1
- 262:	80 e0       	ldi	r24, 0x00	; 0
+ 23c:	10 92 f4 00 	sts	0x00F4, r1
+ 240:	80 e0       	ldi	r24, 0x00	; 0
 
 		for(j=0; j<8; j++)
 			CANMSG = 0;		// CAN Data Message Register
- 264:	10 92 fa 00 	sts	0x00FA, r1
+ 242:	10 92 fa 00 	sts	0x00FA, r1
 		CANIDM1 = 0;		// Clear mask
 		CANIDM2 = 0;		// Clear mask
 		CANIDM3 = 0;		// Clear mask
 		CANIDM4 = 0;		// Clear mask
 
 		for(j=0; j<8; j++)
- 268:	8f 5f       	subi	r24, 0xFF	; 255
- 26a:	88 30       	cpi	r24, 0x08	; 8
- 26c:	d9 f7       	brne	.-10     	; 0x264 <can_init+0x8c>
+ 246:	8f 5f       	subi	r24, 0xFF	; 255
+ 248:	88 30       	cpi	r24, 0x08	; 8
+ 24a:	d9 f7       	brne	.-10     	; 0x242 <can_init+0x8c>
 			CANBT2= 0x0c;
 			CANBT3= 0x37;													
 			break;
 	}
 	
 	for(i=0; i<15; i++)		// Reset all MObs
- 26e:	9f 5f       	subi	r25, 0xFF	; 255
- 270:	9f 30       	cpi	r25, 0x0F	; 15
- 272:	f1 f6       	brne	.-68     	; 0x230 <can_init+0x58>
+ 24c:	9f 5f       	subi	r25, 0xFF	; 255
+ 24e:	9f 30       	cpi	r25, 0x0F	; 15
+ 250:	f1 f6       	brne	.-68     	; 0x20e <can_init+0x58>
 			CANMSG = 0;		// CAN Data Message Register
 							// Clear data
 	}
 							
 							// Clear CAN interrupt registers
 	CANGIE = 0;				// CAN General Interrupt Enable Register 
- 274:	10 92 db 00 	sts	0x00DB, r1
+ 252:	10 92 db 00 	sts	0x00DB, r1
 							// None Interrupts
 	CANIE1 = 0;				// CAN Enable INT MOb Registers 1
- 278:	10 92 df 00 	sts	0x00DF, r1
+ 256:	10 92 df 00 	sts	0x00DF, r1
 							// None Interrupts on MObs
 	CANIE2 = 0;				// CAN Enable INT MOb Registers 2
- 27c:	10 92 de 00 	sts	0x00DE, r1
+ 25a:	10 92 de 00 	sts	0x00DE, r1
 							// None Interrupts on MObs
 	CANSIT1 = 0;			// CAN Status INT MOb Registers 1
- 280:	10 92 e1 00 	sts	0x00E1, r1
+ 25e:	10 92 e1 00 	sts	0x00E1, r1
 							// None Interrupts on MObs
 	CANSIT2 = 0;			// CAN Status INT MOb Registers 2
- 284:	10 92 e0 00 	sts	0x00E0, r1
+ 262:	10 92 e0 00 	sts	0x00E0, r1
 							// None Interrupts on MObs
 
 	CANGCON = (1<<TTC );	// TTC mode *******************************************
- 288:	80 e2       	ldi	r24, 0x20	; 32
- 28a:	80 93 d8 00 	sts	0x00D8, r24
+ 266:	80 e2       	ldi	r24, 0x20	; 32
+ 268:	80 93 d8 00 	sts	0x00D8, r24
 	
 	CANGCON |= (1<<ENASTB);	// CAN General Control Register 
- 28e:	80 91 d8 00 	lds	r24, 0x00D8
- 292:	82 60       	ori	r24, 0x02	; 2
- 294:	80 93 d8 00 	sts	0x00D8, r24
+ 26c:	80 91 d8 00 	lds	r24, 0x00D8
+ 270:	82 60       	ori	r24, 0x02	; 2
+ 272:	80 93 d8 00 	sts	0x00D8, r24
 							// Enable Mode (11 Recessive Bits has Been read)
 							// Start CAN interface
 
 	while (!(CANGSTA & (1<<ENFG))); // CAN General Status Register (Enable Flag)
- 298:	80 91 d9 00 	lds	r24, 0x00D9
- 29c:	82 ff       	sbrs	r24, 2
- 29e:	fc cf       	rjmp	.-8      	; 0x298 <can_init+0xc0>
+ 276:	80 91 d9 00 	lds	r24, 0x00D9
+ 27a:	82 ff       	sbrs	r24, 2
+ 27c:	fc cf       	rjmp	.-8      	; 0x276 <can_init+0xc0>
 									// Wait until module ready
 }
- 2a0:	08 95       	ret
+ 27e:	08 95       	ret
 
-000002a2 <can_tx>:
+00000280 <can_tx>:
 //		obj; MOb 번호 
 //		msg; 메시지 구조체 
 //		rtr; RTR r결정(0; 데이터 프레임, 1; 리모트 프레임)	
 //***************************************************************
 char can_tx (unsigned char obj, struct MOb *msg, char rtr)	// CAN transmission
 {
- 2a2:	cf 93       	push	r28
- 2a4:	df 93       	push	r29
- 2a6:	eb 01       	movw	r28, r22
- 2a8:	64 2f       	mov	r22, r20
+ 280:	cf 93       	push	r28
+ 282:	df 93       	push	r29
+ 284:	eb 01       	movw	r28, r22
+ 286:	64 2f       	mov	r22, r20
 	char send_result = _SEND_FAIL;
 	unsigned char i;	
 	unsigned long can_id= msg->id;
- 2aa:	28 81       	ld	r18, Y
- 2ac:	39 81       	ldd	r19, Y+1	; 0x01
- 2ae:	4a 81       	ldd	r20, Y+2	; 0x02
- 2b0:	5b 81       	ldd	r21, Y+3	; 0x03
+ 288:	28 81       	ld	r18, Y
+ 28a:	39 81       	ldd	r19, Y+1	; 0x01
+ 28c:	4a 81       	ldd	r20, Y+2	; 0x02
+ 28e:	5b 81       	ldd	r21, Y+3	; 0x03
 	
 								// Enable MOb1, auto increment index, start with index = 0
 	CANPAGE = (obj<<4);			// CAN Page MOb Register
- 2b2:	82 95       	swap	r24
- 2b4:	80 7f       	andi	r24, 0xF0	; 240
- 2b6:	80 93 ed 00 	sts	0x00ED, r24
+ 290:	82 95       	swap	r24
+ 292:	80 7f       	andi	r24, 0xF0	; 240
+ 294:	80 93 ed 00 	sts	0x00ED, r24
 								// MOb Number Select
 	CANSTMOB = 0x00;
- 2ba:	10 92 ee 00 	sts	0x00EE, r1
+ 298:	10 92 ee 00 	sts	0x00EE, r1
 	CANCDMOB = 0x00;
- 2be:	10 92 ef 00 	sts	0x00EF, r1
+ 29c:	10 92 ef 00 	sts	0x00EF, r1
 
 	if(msg->ide== 0x00)	// standard
- 2c2:	8d 81       	ldd	r24, Y+5	; 0x05
- 2c4:	88 23       	and	r24, r24
- 2c6:	a9 f4       	brne	.+42     	; 0x2f2 <can_tx+0x50>
+ 2a0:	8d 81       	ldd	r24, Y+5	; 0x05
+ 2a2:	88 23       	and	r24, r24
+ 2a4:	a9 f4       	brne	.+42     	; 0x2d0 <can_tx+0x50>
 	{
 		CANIDT1= (unsigned char)(can_id>>3);
- 2c8:	da 01       	movw	r26, r20
- 2ca:	c9 01       	movw	r24, r18
- 2cc:	f3 e0       	ldi	r31, 0x03	; 3
- 2ce:	b6 95       	lsr	r27
- 2d0:	a7 95       	ror	r26
- 2d2:	97 95       	ror	r25
- 2d4:	87 95       	ror	r24
- 2d6:	fa 95       	dec	r31
- 2d8:	d1 f7       	brne	.-12     	; 0x2ce <can_tx+0x2c>
- 2da:	80 93 f3 00 	sts	0x00F3, r24
+ 2a6:	da 01       	movw	r26, r20
+ 2a8:	c9 01       	movw	r24, r18
+ 2aa:	f3 e0       	ldi	r31, 0x03	; 3
+ 2ac:	b6 95       	lsr	r27
+ 2ae:	a7 95       	ror	r26
+ 2b0:	97 95       	ror	r25
+ 2b2:	87 95       	ror	r24
+ 2b4:	fa 95       	dec	r31
+ 2b6:	d1 f7       	brne	.-12     	; 0x2ac <can_tx+0x2c>
+ 2b8:	80 93 f3 00 	sts	0x00F3, r24
 		CANIDT2= (unsigned char)(can_id<<5);
- 2de:	82 2f       	mov	r24, r18
- 2e0:	82 95       	swap	r24
- 2e2:	88 0f       	add	r24, r24
- 2e4:	80 7e       	andi	r24, 0xE0	; 224
- 2e6:	80 93 f2 00 	sts	0x00F2, r24
+ 2bc:	82 2f       	mov	r24, r18
+ 2be:	82 95       	swap	r24
+ 2c0:	88 0f       	add	r24, r24
+ 2c2:	80 7e       	andi	r24, 0xE0	; 224
+ 2c4:	80 93 f2 00 	sts	0x00F2, r24
 
 		CANCDMOB &= ~0x10;		// Set IDE bit 2.0A 11bits
- 2ea:	80 91 ef 00 	lds	r24, 0x00EF
- 2ee:	8f 7e       	andi	r24, 0xEF	; 239
- 2f0:	2a c0       	rjmp	.+84     	; 0x346 <can_tx+0xa4>
+ 2c8:	80 91 ef 00 	lds	r24, 0x00EF
+ 2cc:	8f 7e       	andi	r24, 0xEF	; 239
+ 2ce:	2a c0       	rjmp	.+84     	; 0x324 <can_tx+0xa4>
 		//usart0_transmit_string("\rstandard\n");
 	}
 	else	// extended
 	{
 		CANIDT1= (unsigned char)(can_id>>21);
- 2f2:	da 01       	movw	r26, r20
- 2f4:	c9 01       	movw	r24, r18
- 2f6:	e5 e1       	ldi	r30, 0x15	; 21
- 2f8:	b6 95       	lsr	r27
- 2fa:	a7 95       	ror	r26
- 2fc:	97 95       	ror	r25
- 2fe:	87 95       	ror	r24
- 300:	ea 95       	dec	r30
- 302:	d1 f7       	brne	.-12     	; 0x2f8 <can_tx+0x56>
- 304:	80 93 f3 00 	sts	0x00F3, r24
+ 2d0:	da 01       	movw	r26, r20
+ 2d2:	c9 01       	movw	r24, r18
+ 2d4:	e5 e1       	ldi	r30, 0x15	; 21
+ 2d6:	b6 95       	lsr	r27
+ 2d8:	a7 95       	ror	r26
+ 2da:	97 95       	ror	r25
+ 2dc:	87 95       	ror	r24
+ 2de:	ea 95       	dec	r30
+ 2e0:	d1 f7       	brne	.-12     	; 0x2d6 <can_tx+0x56>
+ 2e2:	80 93 f3 00 	sts	0x00F3, r24
 		CANIDT2= (unsigned char)(can_id>>13);
- 308:	da 01       	movw	r26, r20
- 30a:	c9 01       	movw	r24, r18
- 30c:	7d e0       	ldi	r23, 0x0D	; 13
- 30e:	b6 95       	lsr	r27
- 310:	a7 95       	ror	r26
- 312:	97 95       	ror	r25
- 314:	87 95       	ror	r24
- 316:	7a 95       	dec	r23
- 318:	d1 f7       	brne	.-12     	; 0x30e <can_tx+0x6c>
- 31a:	80 93 f2 00 	sts	0x00F2, r24
+ 2e6:	da 01       	movw	r26, r20
+ 2e8:	c9 01       	movw	r24, r18
+ 2ea:	7d e0       	ldi	r23, 0x0D	; 13
+ 2ec:	b6 95       	lsr	r27
+ 2ee:	a7 95       	ror	r26
+ 2f0:	97 95       	ror	r25
+ 2f2:	87 95       	ror	r24
+ 2f4:	7a 95       	dec	r23
+ 2f6:	d1 f7       	brne	.-12     	; 0x2ec <can_tx+0x6c>
+ 2f8:	80 93 f2 00 	sts	0x00F2, r24
 		CANIDT3= (unsigned char)(can_id>>5);
- 31e:	da 01       	movw	r26, r20
- 320:	c9 01       	movw	r24, r18
- 322:	35 e0       	ldi	r19, 0x05	; 5
- 324:	b6 95       	lsr	r27
- 326:	a7 95       	ror	r26
- 328:	97 95       	ror	r25
- 32a:	87 95       	ror	r24
- 32c:	3a 95       	dec	r19
- 32e:	d1 f7       	brne	.-12     	; 0x324 <can_tx+0x82>
- 330:	80 93 f1 00 	sts	0x00F1, r24
+ 2fc:	da 01       	movw	r26, r20
+ 2fe:	c9 01       	movw	r24, r18
+ 300:	35 e0       	ldi	r19, 0x05	; 5
+ 302:	b6 95       	lsr	r27
+ 304:	a7 95       	ror	r26
+ 306:	97 95       	ror	r25
+ 308:	87 95       	ror	r24
+ 30a:	3a 95       	dec	r19
+ 30c:	d1 f7       	brne	.-12     	; 0x302 <can_tx+0x82>
+ 30e:	80 93 f1 00 	sts	0x00F1, r24
 		CANIDT4= (unsigned char)(can_id<<3);
- 334:	82 2f       	mov	r24, r18
- 336:	88 0f       	add	r24, r24
- 338:	88 0f       	add	r24, r24
- 33a:	88 0f       	add	r24, r24
- 33c:	80 93 f0 00 	sts	0x00F0, r24
+ 312:	82 2f       	mov	r24, r18
+ 314:	88 0f       	add	r24, r24
+ 316:	88 0f       	add	r24, r24
+ 318:	88 0f       	add	r24, r24
+ 31a:	80 93 f0 00 	sts	0x00F0, r24
 
 		CANCDMOB |= 0x10;		// Set IDE bit 2.0B 29bits
- 340:	80 91 ef 00 	lds	r24, 0x00EF
- 344:	80 61       	ori	r24, 0x10	; 16
- 346:	80 93 ef 00 	sts	0x00EF, r24
+ 31e:	80 91 ef 00 	lds	r24, 0x00EF
+ 322:	80 61       	ori	r24, 0x10	; 16
+ 324:	80 93 ef 00 	sts	0x00EF, r24
 		//usart0_transmit_string("\rExtended\n");
 	}
 
 	CANCDMOB |= (msg->dlc<<DLC0);	// set data length
- 34a:	80 91 ef 00 	lds	r24, 0x00EF
- 34e:	2e 81       	ldd	r18, Y+6	; 0x06
- 350:	82 2b       	or	r24, r18
- 352:	80 93 ef 00 	sts	0x00EF, r24
+ 328:	80 91 ef 00 	lds	r24, 0x00EF
+ 32c:	2e 81       	ldd	r18, Y+6	; 0x06
+ 32e:	82 2b       	or	r24, r18
+ 330:	80 93 ef 00 	sts	0x00EF, r24
 
 	CANIDT4 |= (rtr & 0x04);     // RTRTAG 설정;
- 356:	80 91 f0 00 	lds	r24, 0x00F0
- 35a:	64 70       	andi	r22, 0x04	; 4
- 35c:	86 2b       	or	r24, r22
- 35e:	80 93 f0 00 	sts	0x00F0, r24
+ 334:	80 91 f0 00 	lds	r24, 0x00F0
+ 338:	64 70       	andi	r22, 0x04	; 4
+ 33a:	86 2b       	or	r24, r22
+ 33c:	80 93 f0 00 	sts	0x00F0, r24
 
 	CANIDT4 &= ~0x02;		   // RB1TAG=0;
- 362:	80 91 f0 00 	lds	r24, 0x00F0
- 366:	8d 7f       	andi	r24, 0xFD	; 253
- 368:	80 93 f0 00 	sts	0x00F0, r24
+ 340:	80 91 f0 00 	lds	r24, 0x00F0
+ 344:	8d 7f       	andi	r24, 0xFD	; 253
+ 346:	80 93 f0 00 	sts	0x00F0, r24
 	CANIDT4 &= ~0x01;		   // RB0TAG=1;
- 36c:	80 91 f0 00 	lds	r24, 0x00F0
- 370:	8e 7f       	andi	r24, 0xFE	; 254
- 372:	80 93 f0 00 	sts	0x00F0, r24
- 376:	90 e0       	ldi	r25, 0x00	; 0
- 378:	07 c0       	rjmp	.+14     	; 0x388 <can_tx+0xe6>
+ 34a:	80 91 f0 00 	lds	r24, 0x00F0
+ 34e:	8e 7f       	andi	r24, 0xFE	; 254
+ 350:	80 93 f0 00 	sts	0x00F0, r24
+ 354:	90 e0       	ldi	r25, 0x00	; 0
+ 356:	07 c0       	rjmp	.+14     	; 0x366 <can_tx+0xe6>
 
 	//put data in mailbox
 	for(i=0; i<msg->dlc; i++)
 		CANMSG = msg->data[i];	// full message 
- 37a:	fe 01       	movw	r30, r28
- 37c:	e9 0f       	add	r30, r25
- 37e:	f1 1d       	adc	r31, r1
- 380:	87 81       	ldd	r24, Z+7	; 0x07
- 382:	80 93 fa 00 	sts	0x00FA, r24
+ 358:	fe 01       	movw	r30, r28
+ 35a:	e9 0f       	add	r30, r25
+ 35c:	f1 1d       	adc	r31, r1
+ 35e:	87 81       	ldd	r24, Z+7	; 0x07
+ 360:	80 93 fa 00 	sts	0x00FA, r24
 
 	CANIDT4 &= ~0x02;		   // RB1TAG=0;
 	CANIDT4 &= ~0x01;		   // RB0TAG=1;
 
 	//put data in mailbox
 	for(i=0; i<msg->dlc; i++)
- 386:	9f 5f       	subi	r25, 0xFF	; 255
- 388:	92 17       	cp	r25, r18
- 38a:	b8 f3       	brcs	.-18     	; 0x37a <can_tx+0xd8>
+ 364:	9f 5f       	subi	r25, 0xFF	; 255
+ 366:	92 17       	cp	r25, r18
+ 368:	b8 f3       	brcs	.-18     	; 0x358 <can_tx+0xd8>
 		CANMSG = msg->data[i];	// full message 
 
 	//enable transmission		
 	CANCDMOB |= (1<<CONMOB0);
- 38c:	80 91 ef 00 	lds	r24, 0x00EF
- 390:	80 64       	ori	r24, 0x40	; 64
- 392:	80 93 ef 00 	sts	0x00EF, r24
+ 36a:	80 91 ef 00 	lds	r24, 0x00EF
+ 36e:	80 64       	ori	r24, 0x40	; 64
+ 370:	80 93 ef 00 	sts	0x00EF, r24
 
 
 	//_delay_ms(10);
 	//PORTE=0xAA;
 	if(	(CANSTMOB & (1<<TXOK)) )
- 396:	80 91 ee 00 	lds	r24, 0x00EE
- 39a:	86 fd       	sbrc	r24, 6
+ 374:	80 91 ee 00 	lds	r24, 0x00EE
+ 378:	86 fd       	sbrc	r24, 6
 	{
 		PORTE=0x00;
- 39c:	1e b8       	out	0x0e, r1	; 14
+ 37a:	1e b8       	out	0x0e, r1	; 14
 
 	// monitoring with serial com
 	// usart1_transmit_string("\rTXOK\n");
 
 	//reset flag
 	CANSTMOB &= ~(1<<TXOK);
- 39e:	80 91 ee 00 	lds	r24, 0x00EE
- 3a2:	8f 7b       	andi	r24, 0xBF	; 191
- 3a4:	80 93 ee 00 	sts	0x00EE, r24
+ 37c:	80 91 ee 00 	lds	r24, 0x00EE
+ 380:	8f 7b       	andi	r24, 0xBF	; 191
+ 382:	80 93 ee 00 	sts	0x00EE, r24
 
 	return(send_result);
 }
- 3a8:	81 e0       	ldi	r24, 0x01	; 1
- 3aa:	df 91       	pop	r29
- 3ac:	cf 91       	pop	r28
- 3ae:	08 95       	ret
+ 386:	81 e0       	ldi	r24, 0x01	; 1
+ 388:	df 91       	pop	r29
+ 38a:	cf 91       	pop	r28
+ 38c:	08 95       	ret
 
-000003b0 <can_int_rx_set>:
+0000038e <can_int_rx_set>:
 //  5. DLC 설정 
 //  6. 인터럽트 인에이블 (interrupt)
 //  7. 수신 모드 설정 
 //****************************************************************/
 void can_int_rx_set(char obj, unsigned long id, char rplvIde, unsigned char dlc, unsigned long idmask, unsigned char rtrIdemask)
 {
- 3b0:	af 92       	push	r10
- 3b2:	cf 92       	push	r12
- 3b4:	df 92       	push	r13
- 3b6:	ef 92       	push	r14
- 3b8:	ff 92       	push	r15
- 3ba:	0f 93       	push	r16
- 3bc:	1f 93       	push	r17
- 3be:	18 2f       	mov	r17, r24
+ 38e:	af 92       	push	r10
+ 390:	cf 92       	push	r12
+ 392:	df 92       	push	r13
+ 394:	ef 92       	push	r14
+ 396:	ff 92       	push	r15
+ 398:	0f 93       	push	r16
+ 39a:	1f 93       	push	r17
+ 39c:	18 2f       	mov	r17, r24
 	CANPAGE = obj<<4;		// set MOb number
- 3c0:	82 95       	swap	r24
- 3c2:	80 7f       	andi	r24, 0xF0	; 240
- 3c4:	80 93 ed 00 	sts	0x00ED, r24
+ 39e:	82 95       	swap	r24
+ 3a0:	80 7f       	andi	r24, 0xF0	; 240
+ 3a2:	80 93 ed 00 	sts	0x00ED, r24
 
 	CANSTMOB = 0x00;		// clear status
- 3c8:	10 92 ee 00 	sts	0x00EE, r1
+ 3a6:	10 92 ee 00 	sts	0x00EE, r1
 
 	if(rplvIde & 0x02)	
- 3cc:	21 ff       	sbrs	r18, 1
- 3ce:	04 c0       	rjmp	.+8      	; 0x3d8 <can_int_rx_set+0x28>
+ 3aa:	21 ff       	sbrs	r18, 1
+ 3ac:	04 c0       	rjmp	.+8      	; 0x3b6 <can_int_rx_set+0x28>
 		CANCDMOB |= 0x20;			// RPLV set, 자동 응답 모드 설정 
- 3d0:	80 91 ef 00 	lds	r24, 0x00EF
- 3d4:	80 62       	ori	r24, 0x20	; 32
- 3d6:	03 c0       	rjmp	.+6      	; 0x3de <can_int_rx_set+0x2e>
+ 3ae:	80 91 ef 00 	lds	r24, 0x00EF
+ 3b2:	80 62       	ori	r24, 0x20	; 32
+ 3b4:	03 c0       	rjmp	.+6      	; 0x3bc <can_int_rx_set+0x2e>
 	else
 		CANCDMOB &= ~0x20;			// RPLV clear
- 3d8:	80 91 ef 00 	lds	r24, 0x00EF
- 3dc:	8f 7d       	andi	r24, 0xDF	; 223
- 3de:	80 93 ef 00 	sts	0x00EF, r24
+ 3b6:	80 91 ef 00 	lds	r24, 0x00EF
+ 3ba:	8f 7d       	andi	r24, 0xDF	; 223
+ 3bc:	80 93 ef 00 	sts	0x00EF, r24
 
 	if(( rplvIde & 0x01) == STD)			// standard
- 3e2:	20 fd       	sbrc	r18, 0
- 3e4:	2c c0       	rjmp	.+88     	; 0x43e <can_int_rx_set+0x8e>
+ 3c0:	20 fd       	sbrc	r18, 0
+ 3c2:	2c c0       	rjmp	.+88     	; 0x41c <can_int_rx_set+0x8e>
 	{
 		CANIDT1= (unsigned char)(id>>3);
- 3e6:	db 01       	movw	r26, r22
- 3e8:	ca 01       	movw	r24, r20
- 3ea:	33 e0       	ldi	r19, 0x03	; 3
+ 3c4:	db 01       	movw	r26, r22
+ 3c6:	ca 01       	movw	r24, r20
+ 3c8:	33 e0       	ldi	r19, 0x03	; 3
+ 3ca:	b6 95       	lsr	r27
+ 3cc:	a7 95       	ror	r26
+ 3ce:	97 95       	ror	r25
+ 3d0:	87 95       	ror	r24
+ 3d2:	3a 95       	dec	r19
+ 3d4:	d1 f7       	brne	.-12     	; 0x3ca <can_int_rx_set+0x3c>
+ 3d6:	80 93 f3 00 	sts	0x00F3, r24
+		CANIDT2= (unsigned char)(id<<5);
+ 3da:	84 2f       	mov	r24, r20
+ 3dc:	82 95       	swap	r24
+ 3de:	88 0f       	add	r24, r24
+ 3e0:	80 7e       	andi	r24, 0xE0	; 224
+ 3e2:	80 93 f2 00 	sts	0x00F2, r24
+
+		CANIDM1= (unsigned char)(idmask>>3);
+ 3e6:	d7 01       	movw	r26, r14
+ 3e8:	c6 01       	movw	r24, r12
+ 3ea:	23 e0       	ldi	r18, 0x03	; 3
  3ec:	b6 95       	lsr	r27
  3ee:	a7 95       	ror	r26
  3f0:	97 95       	ror	r25
  3f2:	87 95       	ror	r24
- 3f4:	3a 95       	dec	r19
- 3f6:	d1 f7       	brne	.-12     	; 0x3ec <can_int_rx_set+0x3c>
- 3f8:	80 93 f3 00 	sts	0x00F3, r24
-		CANIDT2= (unsigned char)(id<<5);
- 3fc:	84 2f       	mov	r24, r20
+ 3f4:	2a 95       	dec	r18
+ 3f6:	d1 f7       	brne	.-12     	; 0x3ec <can_int_rx_set+0x5e>
+ 3f8:	80 93 f7 00 	sts	0x00F7, r24
+		CANIDM2= (unsigned char)(idmask<<5);
+ 3fc:	8c 2d       	mov	r24, r12
  3fe:	82 95       	swap	r24
  400:	88 0f       	add	r24, r24
  402:	80 7e       	andi	r24, 0xE0	; 224
- 404:	80 93 f2 00 	sts	0x00F2, r24
-
-		CANIDM1= (unsigned char)(idmask>>3);
- 408:	d7 01       	movw	r26, r14
- 40a:	c6 01       	movw	r24, r12
- 40c:	23 e0       	ldi	r18, 0x03	; 3
- 40e:	b6 95       	lsr	r27
- 410:	a7 95       	ror	r26
- 412:	97 95       	ror	r25
- 414:	87 95       	ror	r24
- 416:	2a 95       	dec	r18
- 418:	d1 f7       	brne	.-12     	; 0x40e <can_int_rx_set+0x5e>
- 41a:	80 93 f7 00 	sts	0x00F7, r24
-		CANIDM2= (unsigned char)(idmask<<5);
- 41e:	8c 2d       	mov	r24, r12
- 420:	82 95       	swap	r24
- 422:	88 0f       	add	r24, r24
- 424:	80 7e       	andi	r24, 0xE0	; 224
- 426:	80 93 f6 00 	sts	0x00F6, r24
+ 404:	80 93 f6 00 	sts	0x00F6, r24
 		CANIDM4=0;
- 42a:	10 92 f4 00 	sts	0x00F4, r1
+ 408:	10 92 f4 00 	sts	0x00F4, r1
 
 		CANCDMOB &= ~0x10;	// clear IDE =0, standard 11 bits
- 42e:	80 91 ef 00 	lds	r24, 0x00EF
- 432:	8f 7e       	andi	r24, 0xEF	; 239
- 434:	80 93 ef 00 	sts	0x00EF, r24
+ 40c:	80 91 ef 00 	lds	r24, 0x00EF
+ 410:	8f 7e       	andi	r24, 0xEF	; 239
+ 412:	80 93 ef 00 	sts	0x00EF, r24
 
 		usart1_transmit_string("\rRx Standard Set\n");
- 438:	8e ef       	ldi	r24, 0xFE	; 254
- 43a:	92 e0       	ldi	r25, 0x02	; 2
- 43c:	55 c0       	rjmp	.+170    	; 0x4e8 <can_int_rx_set+0x138>
+ 416:	8e ef       	ldi	r24, 0xFE	; 254
+ 418:	92 e0       	ldi	r25, 0x02	; 2
+ 41a:	55 c0       	rjmp	.+170    	; 0x4c6 <can_int_rx_set+0x138>
 	}
 	else					// extended
 	{
 		CANIDT1= (unsigned char)(id>>21);
- 43e:	db 01       	movw	r26, r22
- 440:	ca 01       	movw	r24, r20
- 442:	f5 e1       	ldi	r31, 0x15	; 21
- 444:	b6 95       	lsr	r27
- 446:	a7 95       	ror	r26
- 448:	97 95       	ror	r25
- 44a:	87 95       	ror	r24
- 44c:	fa 95       	dec	r31
- 44e:	d1 f7       	brne	.-12     	; 0x444 <can_int_rx_set+0x94>
- 450:	80 93 f3 00 	sts	0x00F3, r24
+ 41c:	db 01       	movw	r26, r22
+ 41e:	ca 01       	movw	r24, r20
+ 420:	f5 e1       	ldi	r31, 0x15	; 21
+ 422:	b6 95       	lsr	r27
+ 424:	a7 95       	ror	r26
+ 426:	97 95       	ror	r25
+ 428:	87 95       	ror	r24
+ 42a:	fa 95       	dec	r31
+ 42c:	d1 f7       	brne	.-12     	; 0x422 <can_int_rx_set+0x94>
+ 42e:	80 93 f3 00 	sts	0x00F3, r24
 		CANIDT2= (unsigned char)(id>>13);
- 454:	db 01       	movw	r26, r22
- 456:	ca 01       	movw	r24, r20
- 458:	ed e0       	ldi	r30, 0x0D	; 13
- 45a:	b6 95       	lsr	r27
- 45c:	a7 95       	ror	r26
- 45e:	97 95       	ror	r25
- 460:	87 95       	ror	r24
- 462:	ea 95       	dec	r30
- 464:	d1 f7       	brne	.-12     	; 0x45a <can_int_rx_set+0xaa>
- 466:	80 93 f2 00 	sts	0x00F2, r24
+ 432:	db 01       	movw	r26, r22
+ 434:	ca 01       	movw	r24, r20
+ 436:	ed e0       	ldi	r30, 0x0D	; 13
+ 438:	b6 95       	lsr	r27
+ 43a:	a7 95       	ror	r26
+ 43c:	97 95       	ror	r25
+ 43e:	87 95       	ror	r24
+ 440:	ea 95       	dec	r30
+ 442:	d1 f7       	brne	.-12     	; 0x438 <can_int_rx_set+0xaa>
+ 444:	80 93 f2 00 	sts	0x00F2, r24
 		CANIDT3= (unsigned char)(id>>5);
- 46a:	db 01       	movw	r26, r22
- 46c:	ca 01       	movw	r24, r20
- 46e:	55 e0       	ldi	r21, 0x05	; 5
+ 448:	db 01       	movw	r26, r22
+ 44a:	ca 01       	movw	r24, r20
+ 44c:	55 e0       	ldi	r21, 0x05	; 5
+ 44e:	b6 95       	lsr	r27
+ 450:	a7 95       	ror	r26
+ 452:	97 95       	ror	r25
+ 454:	87 95       	ror	r24
+ 456:	5a 95       	dec	r21
+ 458:	d1 f7       	brne	.-12     	; 0x44e <can_int_rx_set+0xc0>
+ 45a:	80 93 f1 00 	sts	0x00F1, r24
+		CANIDT4= (unsigned char)(id<<3);
+ 45e:	84 2f       	mov	r24, r20
+ 460:	88 0f       	add	r24, r24
+ 462:	88 0f       	add	r24, r24
+ 464:	88 0f       	add	r24, r24
+ 466:	80 93 f0 00 	sts	0x00F0, r24
+
+		CANIDM1= (unsigned char)(idmask>>21);
+ 46a:	d7 01       	movw	r26, r14
+ 46c:	c6 01       	movw	r24, r12
+ 46e:	45 e1       	ldi	r20, 0x15	; 21
  470:	b6 95       	lsr	r27
  472:	a7 95       	ror	r26
  474:	97 95       	ror	r25
  476:	87 95       	ror	r24
- 478:	5a 95       	dec	r21
- 47a:	d1 f7       	brne	.-12     	; 0x470 <can_int_rx_set+0xc0>
- 47c:	80 93 f1 00 	sts	0x00F1, r24
-		CANIDT4= (unsigned char)(id<<3);
- 480:	84 2f       	mov	r24, r20
- 482:	88 0f       	add	r24, r24
- 484:	88 0f       	add	r24, r24
- 486:	88 0f       	add	r24, r24
- 488:	80 93 f0 00 	sts	0x00F0, r24
-
-		CANIDM1= (unsigned char)(idmask>>21);
- 48c:	d7 01       	movw	r26, r14
- 48e:	c6 01       	movw	r24, r12
- 490:	45 e1       	ldi	r20, 0x15	; 21
- 492:	b6 95       	lsr	r27
- 494:	a7 95       	ror	r26
- 496:	97 95       	ror	r25
- 498:	87 95       	ror	r24
- 49a:	4a 95       	dec	r20
- 49c:	d1 f7       	brne	.-12     	; 0x492 <can_int_rx_set+0xe2>
- 49e:	80 93 f7 00 	sts	0x00F7, r24
+ 478:	4a 95       	dec	r20
+ 47a:	d1 f7       	brne	.-12     	; 0x470 <can_int_rx_set+0xe2>
+ 47c:	80 93 f7 00 	sts	0x00F7, r24
 		CANIDM2= (unsigned char)(idmask>>13);
- 4a2:	d7 01       	movw	r26, r14
- 4a4:	c6 01       	movw	r24, r12
- 4a6:	3d e0       	ldi	r19, 0x0D	; 13
- 4a8:	b6 95       	lsr	r27
- 4aa:	a7 95       	ror	r26
- 4ac:	97 95       	ror	r25
- 4ae:	87 95       	ror	r24
- 4b0:	3a 95       	dec	r19
- 4b2:	d1 f7       	brne	.-12     	; 0x4a8 <can_int_rx_set+0xf8>
- 4b4:	80 93 f6 00 	sts	0x00F6, r24
+ 480:	d7 01       	movw	r26, r14
+ 482:	c6 01       	movw	r24, r12
+ 484:	3d e0       	ldi	r19, 0x0D	; 13
+ 486:	b6 95       	lsr	r27
+ 488:	a7 95       	ror	r26
+ 48a:	97 95       	ror	r25
+ 48c:	87 95       	ror	r24
+ 48e:	3a 95       	dec	r19
+ 490:	d1 f7       	brne	.-12     	; 0x486 <can_int_rx_set+0xf8>
+ 492:	80 93 f6 00 	sts	0x00F6, r24
 		CANIDM3= (unsigned char)(idmask>>5);
- 4b8:	d7 01       	movw	r26, r14
- 4ba:	c6 01       	movw	r24, r12
- 4bc:	25 e0       	ldi	r18, 0x05	; 5
- 4be:	b6 95       	lsr	r27
- 4c0:	a7 95       	ror	r26
- 4c2:	97 95       	ror	r25
- 4c4:	87 95       	ror	r24
- 4c6:	2a 95       	dec	r18
- 4c8:	d1 f7       	brne	.-12     	; 0x4be <can_int_rx_set+0x10e>
- 4ca:	80 93 f5 00 	sts	0x00F5, r24
+ 496:	d7 01       	movw	r26, r14
+ 498:	c6 01       	movw	r24, r12
+ 49a:	25 e0       	ldi	r18, 0x05	; 5
+ 49c:	b6 95       	lsr	r27
+ 49e:	a7 95       	ror	r26
+ 4a0:	97 95       	ror	r25
+ 4a2:	87 95       	ror	r24
+ 4a4:	2a 95       	dec	r18
+ 4a6:	d1 f7       	brne	.-12     	; 0x49c <can_int_rx_set+0x10e>
+ 4a8:	80 93 f5 00 	sts	0x00F5, r24
 		CANIDM4= (unsigned char)(idmask<<3);
- 4ce:	8c 2d       	mov	r24, r12
- 4d0:	88 0f       	add	r24, r24
- 4d2:	88 0f       	add	r24, r24
- 4d4:	88 0f       	add	r24, r24
- 4d6:	80 93 f4 00 	sts	0x00F4, r24
+ 4ac:	8c 2d       	mov	r24, r12
+ 4ae:	88 0f       	add	r24, r24
+ 4b0:	88 0f       	add	r24, r24
+ 4b2:	88 0f       	add	r24, r24
+ 4b4:	80 93 f4 00 	sts	0x00F4, r24
 
 		CANCDMOB |= 0x10;	// set IDE =1, extended 29 bits
- 4da:	80 91 ef 00 	lds	r24, 0x00EF
- 4de:	80 61       	ori	r24, 0x10	; 16
- 4e0:	80 93 ef 00 	sts	0x00EF, r24
+ 4b8:	80 91 ef 00 	lds	r24, 0x00EF
+ 4bc:	80 61       	ori	r24, 0x10	; 16
+ 4be:	80 93 ef 00 	sts	0x00EF, r24
 
 		usart1_transmit_string("\rRx Extended Set\n");
- 4e4:	80 e1       	ldi	r24, 0x10	; 16
- 4e6:	93 e0       	ldi	r25, 0x03	; 3
- 4e8:	0e 94 b5 00 	call	0x16a	; 0x16a <usart1_transmit_string>
+ 4c2:	80 e1       	ldi	r24, 0x10	; 16
+ 4c4:	93 e0       	ldi	r25, 0x03	; 3
+ 4c6:	0e 94 a4 00 	call	0x148	; 0x148 <usart1_transmit_string>
 	}
 	CANCDMOB |= (dlc & 0x0f);		// set data length
- 4ec:	80 91 ef 00 	lds	r24, 0x00EF
- 4f0:	0f 70       	andi	r16, 0x0F	; 15
- 4f2:	80 2b       	or	r24, r16
- 4f4:	80 93 ef 00 	sts	0x00EF, r24
+ 4ca:	80 91 ef 00 	lds	r24, 0x00EF
+ 4ce:	0f 70       	andi	r16, 0x0F	; 15
+ 4d0:	80 2b       	or	r24, r16
+ 4d2:	80 93 ef 00 	sts	0x00EF, r24
 
 	CANIDM4 |= (unsigned char)(rtrIdemask & 0x07);
- 4f8:	80 91 f4 00 	lds	r24, 0x00F4
- 4fc:	97 e0       	ldi	r25, 0x07	; 7
- 4fe:	a9 22       	and	r10, r25
- 500:	8a 29       	or	r24, r10
- 502:	80 93 f4 00 	sts	0x00F4, r24
+ 4d6:	80 91 f4 00 	lds	r24, 0x00F4
+ 4da:	97 e0       	ldi	r25, 0x07	; 7
+ 4dc:	a9 22       	and	r10, r25
+ 4de:	8a 29       	or	r24, r10
+ 4e0:	80 93 f4 00 	sts	0x00F4, r24
 //	CANIDM4 &= ~0x02;		// recommended
 //	CANIDM4 &= ~0x01;		// IDEMSK= 1/0 enable comparison (IDE receive)
 
 
 //  인터럽트 인에이블(인터럽트 설정)
 	CANGIE |= 0xa0; 		// Enable all interrupt and Enable Rx interrupt
- 506:	80 91 db 00 	lds	r24, 0x00DB
- 50a:	80 6a       	ori	r24, 0xA0	; 160
- 50c:	80 93 db 00 	sts	0x00DB, r24
+ 4e4:	80 91 db 00 	lds	r24, 0x00DB
+ 4e8:	80 6a       	ori	r24, 0xA0	; 160
+ 4ea:	80 93 db 00 	sts	0x00DB, r24
 
 	if(obj<8) 
- 510:	18 30       	cpi	r17, 0x08	; 8
- 512:	50 f4       	brcc	.+20     	; 0x528 <can_int_rx_set+0x178>
+ 4ee:	18 30       	cpi	r17, 0x08	; 8
+ 4f0:	50 f4       	brcc	.+20     	; 0x506 <can_int_rx_set+0x178>
 		CANIE2 = (1<<obj);		// 해당 MOb의 인터럽트를 인에이블 시킴 
- 514:	81 e0       	ldi	r24, 0x01	; 1
- 516:	90 e0       	ldi	r25, 0x00	; 0
- 518:	02 c0       	rjmp	.+4      	; 0x51e <can_int_rx_set+0x16e>
- 51a:	88 0f       	add	r24, r24
- 51c:	99 1f       	adc	r25, r25
- 51e:	1a 95       	dec	r17
- 520:	e2 f7       	brpl	.-8      	; 0x51a <can_int_rx_set+0x16a>
- 522:	80 93 de 00 	sts	0x00DE, r24
- 526:	0d c0       	rjmp	.+26     	; 0x542 <can_int_rx_set+0x192>
+ 4f2:	81 e0       	ldi	r24, 0x01	; 1
+ 4f4:	90 e0       	ldi	r25, 0x00	; 0
+ 4f6:	02 c0       	rjmp	.+4      	; 0x4fc <can_int_rx_set+0x16e>
+ 4f8:	88 0f       	add	r24, r24
+ 4fa:	99 1f       	adc	r25, r25
+ 4fc:	1a 95       	dec	r17
+ 4fe:	e2 f7       	brpl	.-8      	; 0x4f8 <can_int_rx_set+0x16a>
+ 500:	80 93 de 00 	sts	0x00DE, r24
+ 504:	0d c0       	rjmp	.+26     	; 0x520 <can_int_rx_set+0x192>
 	else        
 		CANIE1 = (1<<(obj-8));	// 
- 528:	21 2f       	mov	r18, r17
- 52a:	30 e0       	ldi	r19, 0x00	; 0
- 52c:	28 50       	subi	r18, 0x08	; 8
- 52e:	30 40       	sbci	r19, 0x00	; 0
- 530:	81 e0       	ldi	r24, 0x01	; 1
- 532:	90 e0       	ldi	r25, 0x00	; 0
- 534:	02 c0       	rjmp	.+4      	; 0x53a <can_int_rx_set+0x18a>
- 536:	88 0f       	add	r24, r24
- 538:	99 1f       	adc	r25, r25
- 53a:	2a 95       	dec	r18
- 53c:	e2 f7       	brpl	.-8      	; 0x536 <can_int_rx_set+0x186>
- 53e:	80 93 df 00 	sts	0x00DF, r24
+ 506:	21 2f       	mov	r18, r17
+ 508:	30 e0       	ldi	r19, 0x00	; 0
+ 50a:	28 50       	subi	r18, 0x08	; 8
+ 50c:	30 40       	sbci	r19, 0x00	; 0
+ 50e:	81 e0       	ldi	r24, 0x01	; 1
+ 510:	90 e0       	ldi	r25, 0x00	; 0
+ 512:	02 c0       	rjmp	.+4      	; 0x518 <can_int_rx_set+0x18a>
+ 514:	88 0f       	add	r24, r24
+ 516:	99 1f       	adc	r25, r25
+ 518:	2a 95       	dec	r18
+ 51a:	e2 f7       	brpl	.-8      	; 0x514 <can_int_rx_set+0x186>
+ 51c:	80 93 df 00 	sts	0x00DF, r24
 
 	CANCDMOB |= 0x80;			// 수신 인에이블 
- 542:	80 91 ef 00 	lds	r24, 0x00EF
- 546:	80 68       	ori	r24, 0x80	; 128
- 548:	80 93 ef 00 	sts	0x00EF, r24
+ 520:	80 91 ef 00 	lds	r24, 0x00EF
+ 524:	80 68       	ori	r24, 0x80	; 128
+ 526:	80 93 ef 00 	sts	0x00EF, r24
 	sei();
- 54c:	78 94       	sei
+ 52a:	78 94       	sei
 }
- 54e:	1f 91       	pop	r17
- 550:	0f 91       	pop	r16
- 552:	ff 90       	pop	r15
- 554:	ef 90       	pop	r14
- 556:	df 90       	pop	r13
- 558:	cf 90       	pop	r12
- 55a:	af 90       	pop	r10
- 55c:	08 95       	ret
+ 52c:	1f 91       	pop	r17
+ 52e:	0f 91       	pop	r16
+ 530:	ff 90       	pop	r15
+ 532:	ef 90       	pop	r14
+ 534:	df 90       	pop	r13
+ 536:	cf 90       	pop	r12
+ 538:	af 90       	pop	r10
+ 53a:	08 95       	ret
 
-0000055e <can_rx_set>:
+0000053c <can_rx_set>:
 //		dlc; 메시지 데이터 길이 (최대 8bytes)
 //		idmask; CAN ID 수신 마스크 
 //		rtrIdemask; RTR 비트와 IDE 마스크 			
 //****************************************************************/
 void can_rx_set(char obj, unsigned long id, char ide, unsigned char dlc, unsigned long idmask, unsigned char rtrIdemask)
 {
- 55e:	af 92       	push	r10
- 560:	cf 92       	push	r12
- 562:	df 92       	push	r13
- 564:	ef 92       	push	r14
- 566:	ff 92       	push	r15
- 568:	0f 93       	push	r16
- 56a:	1f 93       	push	r17
- 56c:	1a 2d       	mov	r17, r10
+ 53c:	af 92       	push	r10
+ 53e:	cf 92       	push	r12
+ 540:	df 92       	push	r13
+ 542:	ef 92       	push	r14
+ 544:	ff 92       	push	r15
+ 546:	0f 93       	push	r16
+ 548:	1f 93       	push	r17
+ 54a:	1a 2d       	mov	r17, r10
 	CANPAGE = obj<<4;		// set MOb number
- 56e:	82 95       	swap	r24
- 570:	80 7f       	andi	r24, 0xF0	; 240
- 572:	80 93 ed 00 	sts	0x00ED, r24
+ 54c:	82 95       	swap	r24
+ 54e:	80 7f       	andi	r24, 0xF0	; 240
+ 550:	80 93 ed 00 	sts	0x00ED, r24
 
 	CANSTMOB = 0x00;		// clear status
- 576:	10 92 ee 00 	sts	0x00EE, r1
+ 554:	10 92 ee 00 	sts	0x00EE, r1
 
 	if(ide== STD)			// standard
- 57a:	22 23       	and	r18, r18
- 57c:	61 f5       	brne	.+88     	; 0x5d6 <can_rx_set+0x78>
+ 558:	22 23       	and	r18, r18
+ 55a:	61 f5       	brne	.+88     	; 0x5b4 <can_rx_set+0x78>
 	{
 		CANIDT1= (unsigned char)(id>>3);
- 57e:	db 01       	movw	r26, r22
- 580:	ca 01       	movw	r24, r20
- 582:	33 e0       	ldi	r19, 0x03	; 3
+ 55c:	db 01       	movw	r26, r22
+ 55e:	ca 01       	movw	r24, r20
+ 560:	33 e0       	ldi	r19, 0x03	; 3
+ 562:	b6 95       	lsr	r27
+ 564:	a7 95       	ror	r26
+ 566:	97 95       	ror	r25
+ 568:	87 95       	ror	r24
+ 56a:	3a 95       	dec	r19
+ 56c:	d1 f7       	brne	.-12     	; 0x562 <can_rx_set+0x26>
+ 56e:	80 93 f3 00 	sts	0x00F3, r24
+		CANIDT2= (unsigned char)(id<<5);
+ 572:	84 2f       	mov	r24, r20
+ 574:	82 95       	swap	r24
+ 576:	88 0f       	add	r24, r24
+ 578:	80 7e       	andi	r24, 0xE0	; 224
+ 57a:	80 93 f2 00 	sts	0x00F2, r24
+
+		CANIDM1= (unsigned char)(idmask>>3);
+ 57e:	d7 01       	movw	r26, r14
+ 580:	c6 01       	movw	r24, r12
+ 582:	23 e0       	ldi	r18, 0x03	; 3
  584:	b6 95       	lsr	r27
  586:	a7 95       	ror	r26
  588:	97 95       	ror	r25
  58a:	87 95       	ror	r24
- 58c:	3a 95       	dec	r19
- 58e:	d1 f7       	brne	.-12     	; 0x584 <can_rx_set+0x26>
- 590:	80 93 f3 00 	sts	0x00F3, r24
-		CANIDT2= (unsigned char)(id<<5);
- 594:	84 2f       	mov	r24, r20
+ 58c:	2a 95       	dec	r18
+ 58e:	d1 f7       	brne	.-12     	; 0x584 <can_rx_set+0x48>
+ 590:	80 93 f7 00 	sts	0x00F7, r24
+		CANIDM2= (unsigned char)(idmask<<5);
+ 594:	8c 2d       	mov	r24, r12
  596:	82 95       	swap	r24
  598:	88 0f       	add	r24, r24
  59a:	80 7e       	andi	r24, 0xE0	; 224
- 59c:	80 93 f2 00 	sts	0x00F2, r24
-
-		CANIDM1= (unsigned char)(idmask>>3);
- 5a0:	d7 01       	movw	r26, r14
- 5a2:	c6 01       	movw	r24, r12
- 5a4:	23 e0       	ldi	r18, 0x03	; 3
- 5a6:	b6 95       	lsr	r27
- 5a8:	a7 95       	ror	r26
- 5aa:	97 95       	ror	r25
- 5ac:	87 95       	ror	r24
- 5ae:	2a 95       	dec	r18
- 5b0:	d1 f7       	brne	.-12     	; 0x5a6 <can_rx_set+0x48>
- 5b2:	80 93 f7 00 	sts	0x00F7, r24
-		CANIDM2= (unsigned char)(idmask<<5);
- 5b6:	8c 2d       	mov	r24, r12
- 5b8:	82 95       	swap	r24
- 5ba:	88 0f       	add	r24, r24
- 5bc:	80 7e       	andi	r24, 0xE0	; 224
- 5be:	80 93 f6 00 	sts	0x00F6, r24
+ 59c:	80 93 f6 00 	sts	0x00F6, r24
 		CANIDM4=0;
- 5c2:	10 92 f4 00 	sts	0x00F4, r1
+ 5a0:	10 92 f4 00 	sts	0x00F4, r1
 
 		CANCDMOB &= ~0x10;	// clear IDE =0, standard 11 bits
- 5c6:	80 91 ef 00 	lds	r24, 0x00EF
- 5ca:	8f 7e       	andi	r24, 0xEF	; 239
- 5cc:	80 93 ef 00 	sts	0x00EF, r24
+ 5a4:	80 91 ef 00 	lds	r24, 0x00EF
+ 5a8:	8f 7e       	andi	r24, 0xEF	; 239
+ 5aa:	80 93 ef 00 	sts	0x00EF, r24
 
 		usart1_transmit_string("\rRx Standard Set\n");
- 5d0:	8e ef       	ldi	r24, 0xFE	; 254
- 5d2:	92 e0       	ldi	r25, 0x02	; 2
- 5d4:	55 c0       	rjmp	.+170    	; 0x680 <can_rx_set+0x122>
+ 5ae:	8e ef       	ldi	r24, 0xFE	; 254
+ 5b0:	92 e0       	ldi	r25, 0x02	; 2
+ 5b2:	55 c0       	rjmp	.+170    	; 0x65e <can_rx_set+0x122>
 	}
 	else					// extended
 	{
 		CANIDT1= (unsigned char)(id>>21);
- 5d6:	db 01       	movw	r26, r22
- 5d8:	ca 01       	movw	r24, r20
- 5da:	f5 e1       	ldi	r31, 0x15	; 21
- 5dc:	b6 95       	lsr	r27
- 5de:	a7 95       	ror	r26
- 5e0:	97 95       	ror	r25
- 5e2:	87 95       	ror	r24
- 5e4:	fa 95       	dec	r31
- 5e6:	d1 f7       	brne	.-12     	; 0x5dc <can_rx_set+0x7e>
- 5e8:	80 93 f3 00 	sts	0x00F3, r24
+ 5b4:	db 01       	movw	r26, r22
+ 5b6:	ca 01       	movw	r24, r20
+ 5b8:	f5 e1       	ldi	r31, 0x15	; 21
+ 5ba:	b6 95       	lsr	r27
+ 5bc:	a7 95       	ror	r26
+ 5be:	97 95       	ror	r25
+ 5c0:	87 95       	ror	r24
+ 5c2:	fa 95       	dec	r31
+ 5c4:	d1 f7       	brne	.-12     	; 0x5ba <can_rx_set+0x7e>
+ 5c6:	80 93 f3 00 	sts	0x00F3, r24
 		CANIDT2= (unsigned char)(id>>13);
- 5ec:	db 01       	movw	r26, r22
- 5ee:	ca 01       	movw	r24, r20
- 5f0:	ed e0       	ldi	r30, 0x0D	; 13
- 5f2:	b6 95       	lsr	r27
- 5f4:	a7 95       	ror	r26
- 5f6:	97 95       	ror	r25
- 5f8:	87 95       	ror	r24
- 5fa:	ea 95       	dec	r30
- 5fc:	d1 f7       	brne	.-12     	; 0x5f2 <can_rx_set+0x94>
- 5fe:	80 93 f2 00 	sts	0x00F2, r24
+ 5ca:	db 01       	movw	r26, r22
+ 5cc:	ca 01       	movw	r24, r20
+ 5ce:	ed e0       	ldi	r30, 0x0D	; 13
+ 5d0:	b6 95       	lsr	r27
+ 5d2:	a7 95       	ror	r26
+ 5d4:	97 95       	ror	r25
+ 5d6:	87 95       	ror	r24
+ 5d8:	ea 95       	dec	r30
+ 5da:	d1 f7       	brne	.-12     	; 0x5d0 <can_rx_set+0x94>
+ 5dc:	80 93 f2 00 	sts	0x00F2, r24
 		CANIDT3= (unsigned char)(id>>5);
- 602:	db 01       	movw	r26, r22
- 604:	ca 01       	movw	r24, r20
- 606:	75 e0       	ldi	r23, 0x05	; 5
+ 5e0:	db 01       	movw	r26, r22
+ 5e2:	ca 01       	movw	r24, r20
+ 5e4:	75 e0       	ldi	r23, 0x05	; 5
+ 5e6:	b6 95       	lsr	r27
+ 5e8:	a7 95       	ror	r26
+ 5ea:	97 95       	ror	r25
+ 5ec:	87 95       	ror	r24
+ 5ee:	7a 95       	dec	r23
+ 5f0:	d1 f7       	brne	.-12     	; 0x5e6 <can_rx_set+0xaa>
+ 5f2:	80 93 f1 00 	sts	0x00F1, r24
+		CANIDT4= (unsigned char)(id<<3);
+ 5f6:	84 2f       	mov	r24, r20
+ 5f8:	88 0f       	add	r24, r24
+ 5fa:	88 0f       	add	r24, r24
+ 5fc:	88 0f       	add	r24, r24
+ 5fe:	80 93 f0 00 	sts	0x00F0, r24
+
+		CANIDM1= (unsigned char)(idmask>>21);
+ 602:	d7 01       	movw	r26, r14
+ 604:	c6 01       	movw	r24, r12
+ 606:	65 e1       	ldi	r22, 0x15	; 21
  608:	b6 95       	lsr	r27
  60a:	a7 95       	ror	r26
  60c:	97 95       	ror	r25
  60e:	87 95       	ror	r24
- 610:	7a 95       	dec	r23
- 612:	d1 f7       	brne	.-12     	; 0x608 <can_rx_set+0xaa>
- 614:	80 93 f1 00 	sts	0x00F1, r24
-		CANIDT4= (unsigned char)(id<<3);
- 618:	84 2f       	mov	r24, r20
- 61a:	88 0f       	add	r24, r24
- 61c:	88 0f       	add	r24, r24
- 61e:	88 0f       	add	r24, r24
- 620:	80 93 f0 00 	sts	0x00F0, r24
-
-		CANIDM1= (unsigned char)(idmask>>21);
- 624:	d7 01       	movw	r26, r14
- 626:	c6 01       	movw	r24, r12
- 628:	65 e1       	ldi	r22, 0x15	; 21
- 62a:	b6 95       	lsr	r27
- 62c:	a7 95       	ror	r26
- 62e:	97 95       	ror	r25
- 630:	87 95       	ror	r24
- 632:	6a 95       	dec	r22
- 634:	d1 f7       	brne	.-12     	; 0x62a <can_rx_set+0xcc>
- 636:	80 93 f7 00 	sts	0x00F7, r24
+ 610:	6a 95       	dec	r22
+ 612:	d1 f7       	brne	.-12     	; 0x608 <can_rx_set+0xcc>
+ 614:	80 93 f7 00 	sts	0x00F7, r24
 		CANIDM2= (unsigned char)(idmask>>13);
- 63a:	d7 01       	movw	r26, r14
- 63c:	c6 01       	movw	r24, r12
- 63e:	5d e0       	ldi	r21, 0x0D	; 13
- 640:	b6 95       	lsr	r27
- 642:	a7 95       	ror	r26
- 644:	97 95       	ror	r25
- 646:	87 95       	ror	r24
- 648:	5a 95       	dec	r21
- 64a:	d1 f7       	brne	.-12     	; 0x640 <can_rx_set+0xe2>
- 64c:	80 93 f6 00 	sts	0x00F6, r24
+ 618:	d7 01       	movw	r26, r14
+ 61a:	c6 01       	movw	r24, r12
+ 61c:	5d e0       	ldi	r21, 0x0D	; 13
+ 61e:	b6 95       	lsr	r27
+ 620:	a7 95       	ror	r26
+ 622:	97 95       	ror	r25
+ 624:	87 95       	ror	r24
+ 626:	5a 95       	dec	r21
+ 628:	d1 f7       	brne	.-12     	; 0x61e <can_rx_set+0xe2>
+ 62a:	80 93 f6 00 	sts	0x00F6, r24
 		CANIDM3= (unsigned char)(idmask>>5);
- 650:	d7 01       	movw	r26, r14
- 652:	c6 01       	movw	r24, r12
- 654:	45 e0       	ldi	r20, 0x05	; 5
- 656:	b6 95       	lsr	r27
- 658:	a7 95       	ror	r26
- 65a:	97 95       	ror	r25
- 65c:	87 95       	ror	r24
- 65e:	4a 95       	dec	r20
- 660:	d1 f7       	brne	.-12     	; 0x656 <can_rx_set+0xf8>
- 662:	80 93 f5 00 	sts	0x00F5, r24
+ 62e:	d7 01       	movw	r26, r14
+ 630:	c6 01       	movw	r24, r12
+ 632:	45 e0       	ldi	r20, 0x05	; 5
+ 634:	b6 95       	lsr	r27
+ 636:	a7 95       	ror	r26
+ 638:	97 95       	ror	r25
+ 63a:	87 95       	ror	r24
+ 63c:	4a 95       	dec	r20
+ 63e:	d1 f7       	brne	.-12     	; 0x634 <can_rx_set+0xf8>
+ 640:	80 93 f5 00 	sts	0x00F5, r24
 		CANIDM4= (unsigned char)(idmask<<3);
- 666:	8c 2d       	mov	r24, r12
- 668:	88 0f       	add	r24, r24
- 66a:	88 0f       	add	r24, r24
- 66c:	88 0f       	add	r24, r24
- 66e:	80 93 f4 00 	sts	0x00F4, r24
+ 644:	8c 2d       	mov	r24, r12
+ 646:	88 0f       	add	r24, r24
+ 648:	88 0f       	add	r24, r24
+ 64a:	88 0f       	add	r24, r24
+ 64c:	80 93 f4 00 	sts	0x00F4, r24
 
 		CANCDMOB |= 0x10;	// set IDE =1, extended 29 bits
- 672:	80 91 ef 00 	lds	r24, 0x00EF
- 676:	80 61       	ori	r24, 0x10	; 16
- 678:	80 93 ef 00 	sts	0x00EF, r24
+ 650:	80 91 ef 00 	lds	r24, 0x00EF
+ 654:	80 61       	ori	r24, 0x10	; 16
+ 656:	80 93 ef 00 	sts	0x00EF, r24
 
 		usart1_transmit_string("\rRx Extended Set\n");
- 67c:	80 e1       	ldi	r24, 0x10	; 16
- 67e:	93 e0       	ldi	r25, 0x03	; 3
- 680:	0e 94 b5 00 	call	0x16a	; 0x16a <usart1_transmit_string>
+ 65a:	80 e1       	ldi	r24, 0x10	; 16
+ 65c:	93 e0       	ldi	r25, 0x03	; 3
+ 65e:	0e 94 a4 00 	call	0x148	; 0x148 <usart1_transmit_string>
 	}
 	CANCDMOB |= (dlc & 0x0f);		// set data length
- 684:	80 91 ef 00 	lds	r24, 0x00EF
- 688:	0f 70       	andi	r16, 0x0F	; 15
- 68a:	80 2b       	or	r24, r16
- 68c:	80 93 ef 00 	sts	0x00EF, r24
+ 662:	80 91 ef 00 	lds	r24, 0x00EF
+ 666:	0f 70       	andi	r16, 0x0F	; 15
+ 668:	80 2b       	or	r24, r16
+ 66a:	80 93 ef 00 	sts	0x00EF, r24
 
 	CANIDM4 |= (unsigned char)(rtrIdemask & 0x07);
- 690:	80 91 f4 00 	lds	r24, 0x00F4
- 694:	17 70       	andi	r17, 0x07	; 7
- 696:	81 2b       	or	r24, r17
- 698:	80 93 f4 00 	sts	0x00F4, r24
+ 66e:	80 91 f4 00 	lds	r24, 0x00F4
+ 672:	17 70       	andi	r17, 0x07	; 7
+ 674:	81 2b       	or	r24, r17
+ 676:	80 93 f4 00 	sts	0x00F4, r24
 //	CANIDM4 &= ~0x04;		// RTRMSK= 1/0 enable comparison (Data receive)
 //	CANIDM4 &= ~0x02;		// recommended
 //	CANIDM4 &= ~0x01;		// IDEMSK= 1/0 enable comparison (IDE receive)
 
 	CANCDMOB |= 0x80;		// receive enable 
- 69c:	80 91 ef 00 	lds	r24, 0x00EF
- 6a0:	80 68       	ori	r24, 0x80	; 128
- 6a2:	80 93 ef 00 	sts	0x00EF, r24
+ 67a:	80 91 ef 00 	lds	r24, 0x00EF
+ 67e:	80 68       	ori	r24, 0x80	; 128
+ 680:	80 93 ef 00 	sts	0x00EF, r24
 }
- 6a6:	1f 91       	pop	r17
- 6a8:	0f 91       	pop	r16
- 6aa:	ff 90       	pop	r15
- 6ac:	ef 90       	pop	r14
- 6ae:	df 90       	pop	r13
- 6b0:	cf 90       	pop	r12
- 6b2:	af 90       	pop	r10
- 6b4:	08 95       	ret
+ 684:	1f 91       	pop	r17
+ 686:	0f 91       	pop	r16
+ 688:	ff 90       	pop	r15
+ 68a:	ef 90       	pop	r14
+ 68c:	df 90       	pop	r13
+ 68e:	cf 90       	pop	r12
+ 690:	af 90       	pop	r10
+ 692:	08 95       	ret
 
-000006b6 <can_rx>:
+00000694 <can_rx>:
 // 5. IDE 수신 처리 
 // 6. DLC 수신 처리 
 // 7. Data 수신 처리 
 //***************************************************************
 char can_rx(unsigned char obj, struct MOb *msg)		
 {
- 6b6:	af 92       	push	r10
- 6b8:	bf 92       	push	r11
- 6ba:	cf 92       	push	r12
- 6bc:	df 92       	push	r13
- 6be:	ef 92       	push	r14
- 6c0:	ff 92       	push	r15
- 6c2:	0f 93       	push	r16
- 6c4:	1f 93       	push	r17
- 6c6:	cf 93       	push	r28
- 6c8:	df 93       	push	r29
- 6ca:	08 2f       	mov	r16, r24
- 6cc:	eb 01       	movw	r28, r22
+ 694:	af 92       	push	r10
+ 696:	bf 92       	push	r11
+ 698:	cf 92       	push	r12
+ 69a:	df 92       	push	r13
+ 69c:	ef 92       	push	r14
+ 69e:	ff 92       	push	r15
+ 6a0:	0f 93       	push	r16
+ 6a2:	1f 93       	push	r17
+ 6a4:	cf 93       	push	r28
+ 6a6:	df 93       	push	r29
+ 6a8:	08 2f       	mov	r16, r24
+ 6aa:	eb 01       	movw	r28, r22
 	char rece_result = _RECE_FAIL;
 	unsigned char i;	
 	unsigned long can_id= 0;
 	
 	CANPAGE = (obj<<4);				// 수신 MOb 선택 
- 6ce:	82 95       	swap	r24
- 6d0:	80 7f       	andi	r24, 0xF0	; 240
- 6d2:	80 93 ed 00 	sts	0x00ED, r24
+ 6ac:	82 95       	swap	r24
+ 6ae:	80 7f       	andi	r24, 0xF0	; 240
+ 6b0:	80 93 ed 00 	sts	0x00ED, r24
 
 	usart1_transmit_string("\rRX MOb #");
- 6d6:	82 e2       	ldi	r24, 0x22	; 34
- 6d8:	93 e0       	ldi	r25, 0x03	; 3
- 6da:	0e 94 b5 00 	call	0x16a	; 0x16a <usart1_transmit_string>
+ 6b4:	82 e2       	ldi	r24, 0x22	; 34
+ 6b6:	93 e0       	ldi	r25, 0x03	; 3
+ 6b8:	0e 94 a4 00 	call	0x148	; 0x148 <usart1_transmit_string>
 	usart1_transmit(obj+0x30);
- 6de:	10 e0       	ldi	r17, 0x00	; 0
- 6e0:	c8 01       	movw	r24, r16
- 6e2:	c0 96       	adiw	r24, 0x30	; 48
- 6e4:	0e 94 ad 00 	call	0x15a	; 0x15a <usart1_transmit>
+ 6bc:	10 e0       	ldi	r17, 0x00	; 0
+ 6be:	c8 01       	movw	r24, r16
+ 6c0:	c0 96       	adiw	r24, 0x30	; 48
+ 6c2:	0e 94 9c 00 	call	0x138	; 0x138 <usart1_transmit>
 	usart1_transmit_string("\r\n");
- 6e8:	8c e2       	ldi	r24, 0x2C	; 44
- 6ea:	93 e0       	ldi	r25, 0x03	; 3
- 6ec:	0e 94 b5 00 	call	0x16a	; 0x16a <usart1_transmit_string>
+ 6c6:	8c e2       	ldi	r24, 0x2C	; 44
+ 6c8:	93 e0       	ldi	r25, 0x03	; 3
+ 6ca:	0e 94 a4 00 	call	0x148	; 0x148 <usart1_transmit_string>
 
 	// 수신 완료될 때까지 대기함 
 	while(!(CANSTMOB&(1<<RXOK)));
- 6f0:	80 91 ee 00 	lds	r24, 0x00EE
- 6f4:	85 ff       	sbrs	r24, 5
- 6f6:	fc cf       	rjmp	.-8      	; 0x6f0 <can_rx+0x3a>
+ 6ce:	80 91 ee 00 	lds	r24, 0x00EE
+ 6d2:	85 ff       	sbrs	r24, 5
+ 6d4:	fc cf       	rjmp	.-8      	; 0x6ce <can_rx+0x3a>
 	// 수신이 완료되면 
 	// CANIDT, CANCDMOB, CANMSG에 수신 메시지가 저장됨 
 	// get CANIDT and CANCDMOB and CANMSg
 	usart1_transmit_string("\rRXOK\n");
- 6f8:	8f e2       	ldi	r24, 0x2F	; 47
- 6fa:	93 e0       	ldi	r25, 0x03	; 3
- 6fc:	0e 94 b5 00 	call	0x16a	; 0x16a <usart1_transmit_string>
+ 6d6:	8f e2       	ldi	r24, 0x2F	; 47
+ 6d8:	93 e0       	ldi	r25, 0x03	; 3
+ 6da:	0e 94 a4 00 	call	0x148	; 0x148 <usart1_transmit_string>
 	rece_result = _RECE_OK;
 
 	// 표준 혹은 확장 포맷에 맞추어 ID, IDE 결정 
 	if((CANCDMOB & 0x10) == 0x00){			// IDE standard ?
- 700:	80 91 ef 00 	lds	r24, 0x00EF
- 704:	84 fd       	sbrc	r24, 4
- 706:	1d c0       	rjmp	.+58     	; 0x742 <can_rx+0x8c>
+ 6de:	80 91 ef 00 	lds	r24, 0x00EF
+ 6e2:	84 fd       	sbrc	r24, 4
+ 6e4:	1d c0       	rjmp	.+58     	; 0x720 <can_rx+0x8c>
 		msg->ide= STD;
- 708:	1d 82       	std	Y+5, r1	; 0x05
+ 6e6:	1d 82       	std	Y+5, r1	; 0x05
 		can_id  = ((unsigned long)CANIDT1)<<8;
- 70a:	80 91 f3 00 	lds	r24, 0x00F3
- 70e:	90 e0       	ldi	r25, 0x00	; 0
- 710:	a0 e0       	ldi	r26, 0x00	; 0
- 712:	b0 e0       	ldi	r27, 0x00	; 0
- 714:	aa 24       	eor	r10, r10
- 716:	b8 2e       	mov	r11, r24
- 718:	c9 2e       	mov	r12, r25
- 71a:	da 2e       	mov	r13, r26
+ 6e8:	80 91 f3 00 	lds	r24, 0x00F3
+ 6ec:	90 e0       	ldi	r25, 0x00	; 0
+ 6ee:	a0 e0       	ldi	r26, 0x00	; 0
+ 6f0:	b0 e0       	ldi	r27, 0x00	; 0
+ 6f2:	aa 24       	eor	r10, r10
+ 6f4:	b8 2e       	mov	r11, r24
+ 6f6:	c9 2e       	mov	r12, r25
+ 6f8:	da 2e       	mov	r13, r26
 		can_id |= ((unsigned long)CANIDT2);
- 71c:	80 91 f2 00 	lds	r24, 0x00F2
- 720:	90 e0       	ldi	r25, 0x00	; 0
- 722:	a0 e0       	ldi	r26, 0x00	; 0
- 724:	b0 e0       	ldi	r27, 0x00	; 0
- 726:	a8 2a       	or	r10, r24
- 728:	b9 2a       	or	r11, r25
- 72a:	ca 2a       	or	r12, r26
- 72c:	db 2a       	or	r13, r27
+ 6fa:	80 91 f2 00 	lds	r24, 0x00F2
+ 6fe:	90 e0       	ldi	r25, 0x00	; 0
+ 700:	a0 e0       	ldi	r26, 0x00	; 0
+ 702:	b0 e0       	ldi	r27, 0x00	; 0
+ 704:	a8 2a       	or	r10, r24
+ 706:	b9 2a       	or	r11, r25
+ 708:	ca 2a       	or	r12, r26
+ 70a:	db 2a       	or	r13, r27
 		can_id>>=5;
- 72e:	e5 e0       	ldi	r30, 0x05	; 5
- 730:	d6 94       	lsr	r13
- 732:	c7 94       	ror	r12
- 734:	b7 94       	ror	r11
- 736:	a7 94       	ror	r10
- 738:	ea 95       	dec	r30
- 73a:	d1 f7       	brne	.-12     	; 0x730 <can_rx+0x7a>
+ 70c:	e5 e0       	ldi	r30, 0x05	; 5
+ 70e:	d6 94       	lsr	r13
+ 710:	c7 94       	ror	r12
+ 712:	b7 94       	ror	r11
+ 714:	a7 94       	ror	r10
+ 716:	ea 95       	dec	r30
+ 718:	d1 f7       	brne	.-12     	; 0x70e <can_rx+0x7a>
 		usart1_transmit_string("\rRx Standard\n");
- 73c:	86 e3       	ldi	r24, 0x36	; 54
- 73e:	93 e0       	ldi	r25, 0x03	; 3
- 740:	36 c0       	rjmp	.+108    	; 0x7ae <can_rx+0xf8>
+ 71a:	86 e3       	ldi	r24, 0x36	; 54
+ 71c:	93 e0       	ldi	r25, 0x03	; 3
+ 71e:	36 c0       	rjmp	.+108    	; 0x78c <can_rx+0xf8>
 	}
 	else{
 		msg->ide= EXT;
- 742:	81 e0       	ldi	r24, 0x01	; 1
- 744:	8d 83       	std	Y+5, r24	; 0x05
+ 720:	81 e0       	ldi	r24, 0x01	; 1
+ 722:	8d 83       	std	Y+5, r24	; 0x05
 		can_id  = ((unsigned long)CANIDT1)<<24;
- 746:	80 91 f3 00 	lds	r24, 0x00F3
- 74a:	90 e0       	ldi	r25, 0x00	; 0
- 74c:	a0 e0       	ldi	r26, 0x00	; 0
- 74e:	b0 e0       	ldi	r27, 0x00	; 0
- 750:	d8 2e       	mov	r13, r24
- 752:	cc 24       	eor	r12, r12
- 754:	bb 24       	eor	r11, r11
- 756:	aa 24       	eor	r10, r10
+ 724:	80 91 f3 00 	lds	r24, 0x00F3
+ 728:	90 e0       	ldi	r25, 0x00	; 0
+ 72a:	a0 e0       	ldi	r26, 0x00	; 0
+ 72c:	b0 e0       	ldi	r27, 0x00	; 0
+ 72e:	d8 2e       	mov	r13, r24
+ 730:	cc 24       	eor	r12, r12
+ 732:	bb 24       	eor	r11, r11
+ 734:	aa 24       	eor	r10, r10
 		can_id |= ((unsigned long)CANIDT2)<<16;
- 758:	80 91 f2 00 	lds	r24, 0x00F2
+ 736:	80 91 f2 00 	lds	r24, 0x00F2
 		can_id |= ((unsigned long)CANIDT3)<<8;
- 75c:	e0 90 f1 00 	lds	r14, 0x00F1
+ 73a:	e0 90 f1 00 	lds	r14, 0x00F1
 		can_id |= ((unsigned long)CANIDT4);
- 760:	20 91 f0 00 	lds	r18, 0x00F0
+ 73e:	20 91 f0 00 	lds	r18, 0x00F0
 		usart1_transmit_string("\rRx Standard\n");
 	}
 	else{
 		msg->ide= EXT;
 		can_id  = ((unsigned long)CANIDT1)<<24;
 		can_id |= ((unsigned long)CANIDT2)<<16;
- 764:	90 e0       	ldi	r25, 0x00	; 0
- 766:	a0 e0       	ldi	r26, 0x00	; 0
- 768:	b0 e0       	ldi	r27, 0x00	; 0
- 76a:	dc 01       	movw	r26, r24
- 76c:	99 27       	eor	r25, r25
- 76e:	88 27       	eor	r24, r24
- 770:	a8 2a       	or	r10, r24
- 772:	b9 2a       	or	r11, r25
- 774:	ca 2a       	or	r12, r26
- 776:	db 2a       	or	r13, r27
+ 742:	90 e0       	ldi	r25, 0x00	; 0
+ 744:	a0 e0       	ldi	r26, 0x00	; 0
+ 746:	b0 e0       	ldi	r27, 0x00	; 0
+ 748:	dc 01       	movw	r26, r24
+ 74a:	99 27       	eor	r25, r25
+ 74c:	88 27       	eor	r24, r24
+ 74e:	a8 2a       	or	r10, r24
+ 750:	b9 2a       	or	r11, r25
+ 752:	ca 2a       	or	r12, r26
+ 754:	db 2a       	or	r13, r27
 		can_id |= ((unsigned long)CANIDT3)<<8;
- 778:	30 e0       	ldi	r19, 0x00	; 0
- 77a:	40 e0       	ldi	r20, 0x00	; 0
- 77c:	50 e0       	ldi	r21, 0x00	; 0
- 77e:	a2 2a       	or	r10, r18
- 780:	b3 2a       	or	r11, r19
- 782:	c4 2a       	or	r12, r20
- 784:	d5 2a       	or	r13, r21
+ 756:	30 e0       	ldi	r19, 0x00	; 0
+ 758:	40 e0       	ldi	r20, 0x00	; 0
+ 75a:	50 e0       	ldi	r21, 0x00	; 0
+ 75c:	a2 2a       	or	r10, r18
+ 75e:	b3 2a       	or	r11, r19
+ 760:	c4 2a       	or	r12, r20
+ 762:	d5 2a       	or	r13, r21
 		can_id |= ((unsigned long)CANIDT4);
- 786:	ff 24       	eor	r15, r15
- 788:	00 e0       	ldi	r16, 0x00	; 0
- 78a:	10 e0       	ldi	r17, 0x00	; 0
- 78c:	10 2f       	mov	r17, r16
- 78e:	0f 2d       	mov	r16, r15
- 790:	fe 2c       	mov	r15, r14
- 792:	ee 24       	eor	r14, r14
- 794:	ae 28       	or	r10, r14
- 796:	bf 28       	or	r11, r15
- 798:	c0 2a       	or	r12, r16
- 79a:	d1 2a       	or	r13, r17
+ 764:	ff 24       	eor	r15, r15
+ 766:	00 e0       	ldi	r16, 0x00	; 0
+ 768:	10 e0       	ldi	r17, 0x00	; 0
+ 76a:	10 2f       	mov	r17, r16
+ 76c:	0f 2d       	mov	r16, r15
+ 76e:	fe 2c       	mov	r15, r14
+ 770:	ee 24       	eor	r14, r14
+ 772:	ae 28       	or	r10, r14
+ 774:	bf 28       	or	r11, r15
+ 776:	c0 2a       	or	r12, r16
+ 778:	d1 2a       	or	r13, r17
 		can_id>>=3;
- 79c:	43 e0       	ldi	r20, 0x03	; 3
- 79e:	d6 94       	lsr	r13
- 7a0:	c7 94       	ror	r12
- 7a2:	b7 94       	ror	r11
- 7a4:	a7 94       	ror	r10
- 7a6:	4a 95       	dec	r20
- 7a8:	d1 f7       	brne	.-12     	; 0x79e <can_rx+0xe8>
+ 77a:	43 e0       	ldi	r20, 0x03	; 3
+ 77c:	d6 94       	lsr	r13
+ 77e:	c7 94       	ror	r12
+ 780:	b7 94       	ror	r11
+ 782:	a7 94       	ror	r10
+ 784:	4a 95       	dec	r20
+ 786:	d1 f7       	brne	.-12     	; 0x77c <can_rx+0xe8>
 		usart1_transmit_string("\rRx Extended\n");
- 7aa:	84 e4       	ldi	r24, 0x44	; 68
- 7ac:	93 e0       	ldi	r25, 0x03	; 3
- 7ae:	0e 94 b5 00 	call	0x16a	; 0x16a <usart1_transmit_string>
+ 788:	84 e4       	ldi	r24, 0x44	; 68
+ 78a:	93 e0       	ldi	r25, 0x03	; 3
+ 78c:	0e 94 a4 00 	call	0x148	; 0x148 <usart1_transmit_string>
 	}
 	msg->id= can_id;			// 구조체 변수로 CANID 대입 
- 7b2:	a8 82       	st	Y, r10
- 7b4:	b9 82       	std	Y+1, r11	; 0x01
- 7b6:	ca 82       	std	Y+2, r12	; 0x02
- 7b8:	db 82       	std	Y+3, r13	; 0x03
+ 790:	a8 82       	st	Y, r10
+ 792:	b9 82       	std	Y+1, r11	; 0x01
+ 794:	ca 82       	std	Y+2, r12	; 0x02
+ 796:	db 82       	std	Y+3, r13	; 0x03
 
 	msg->rtr= CANIDT4 & 0x04;   
- 7ba:	80 91 f0 00 	lds	r24, 0x00F0
- 7be:	84 70       	andi	r24, 0x04	; 4
- 7c0:	8c 83       	std	Y+4, r24	; 0x04
+ 798:	80 91 f0 00 	lds	r24, 0x00F0
+ 79c:	84 70       	andi	r24, 0x04	; 4
+ 79e:	8c 83       	std	Y+4, r24	; 0x04
 
 	msg->dlc= CANCDMOB & 0x0f;	// 수신 메시지 길이 구조체 변수에 대입 
- 7c2:	80 91 ef 00 	lds	r24, 0x00EF
- 7c6:	8f 70       	andi	r24, 0x0F	; 15
- 7c8:	8e 83       	std	Y+6, r24	; 0x06
- 7ca:	20 e0       	ldi	r18, 0x00	; 0
- 7cc:	06 c0       	rjmp	.+12     	; 0x7da <can_rx+0x124>
+ 7a0:	80 91 ef 00 	lds	r24, 0x00EF
+ 7a4:	8f 70       	andi	r24, 0x0F	; 15
+ 7a6:	8e 83       	std	Y+6, r24	; 0x06
+ 7a8:	20 e0       	ldi	r18, 0x00	; 0
+ 7aa:	06 c0       	rjmp	.+12     	; 0x7b8 <can_rx+0x124>
 
 	// get data
 	for(i=0; i<(CANCDMOB&0xf); i++){
 		msg->data[i] = CANMSG;	// 메시지 데이터 배열에 저장 
- 7ce:	80 91 fa 00 	lds	r24, 0x00FA
- 7d2:	ec 0f       	add	r30, r28
- 7d4:	fd 1f       	adc	r31, r29
- 7d6:	87 83       	std	Z+7, r24	; 0x07
+ 7ac:	80 91 fa 00 	lds	r24, 0x00FA
+ 7b0:	ec 0f       	add	r30, r28
+ 7b2:	fd 1f       	adc	r31, r29
+ 7b4:	87 83       	std	Z+7, r24	; 0x07
 	msg->rtr= CANIDT4 & 0x04;   
 
 	msg->dlc= CANCDMOB & 0x0f;	// 수신 메시지 길이 구조체 변수에 대입 
 
 	// get data
 	for(i=0; i<(CANCDMOB&0xf); i++){
- 7d8:	2f 5f       	subi	r18, 0xFF	; 255
- 7da:	e2 2f       	mov	r30, r18
- 7dc:	f0 e0       	ldi	r31, 0x00	; 0
- 7de:	80 91 ef 00 	lds	r24, 0x00EF
- 7e2:	90 e0       	ldi	r25, 0x00	; 0
- 7e4:	8f 70       	andi	r24, 0x0F	; 15
- 7e6:	90 70       	andi	r25, 0x00	; 0
- 7e8:	e8 17       	cp	r30, r24
- 7ea:	f9 07       	cpc	r31, r25
- 7ec:	84 f3       	brlt	.-32     	; 0x7ce <can_rx+0x118>
+ 7b6:	2f 5f       	subi	r18, 0xFF	; 255
+ 7b8:	e2 2f       	mov	r30, r18
+ 7ba:	f0 e0       	ldi	r31, 0x00	; 0
+ 7bc:	80 91 ef 00 	lds	r24, 0x00EF
+ 7c0:	90 e0       	ldi	r25, 0x00	; 0
+ 7c2:	8f 70       	andi	r24, 0x0F	; 15
+ 7c4:	90 70       	andi	r25, 0x00	; 0
+ 7c6:	e8 17       	cp	r30, r24
+ 7c8:	f9 07       	cpc	r31, r25
+ 7ca:	84 f3       	brlt	.-32     	; 0x7ac <can_rx+0x118>
 		msg->data[i] = CANMSG;	// 메시지 데이터 배열에 저장 
 	}
 
 	// rx init 
 	CANSTMOB = 0x00;			// 상태 초기 화 
- 7ee:	10 92 ee 00 	sts	0x00EE, r1
+ 7cc:	10 92 ee 00 	sts	0x00EE, r1
 
 	// enable reception mode and ide set
 	CANCDMOB |= (1<<CONMOB1); 	// 수신 IDE 유지하고 수신 모드 설정
- 7f2:	80 91 ef 00 	lds	r24, 0x00EF
- 7f6:	80 68       	ori	r24, 0x80	; 128
- 7f8:	80 93 ef 00 	sts	0x00EF, r24
+ 7d0:	80 91 ef 00 	lds	r24, 0x00EF
+ 7d4:	80 68       	ori	r24, 0x80	; 128
+ 7d6:	80 93 ef 00 	sts	0x00EF, r24
 
 	// reset flag
 	CANSTMOB &= ~(1<<RXOK);		// 수신대기 
- 7fc:	80 91 ee 00 	lds	r24, 0x00EE
- 800:	8f 7d       	andi	r24, 0xDF	; 223
- 802:	80 93 ee 00 	sts	0x00EE, r24
+ 7da:	80 91 ee 00 	lds	r24, 0x00EE
+ 7de:	8f 7d       	andi	r24, 0xDF	; 223
+ 7e0:	80 93 ee 00 	sts	0x00EE, r24
 
 	return(rece_result);
 }
- 806:	81 e0       	ldi	r24, 0x01	; 1
- 808:	df 91       	pop	r29
- 80a:	cf 91       	pop	r28
- 80c:	1f 91       	pop	r17
- 80e:	0f 91       	pop	r16
- 810:	ff 90       	pop	r15
- 812:	ef 90       	pop	r14
- 814:	df 90       	pop	r13
- 816:	cf 90       	pop	r12
- 818:	bf 90       	pop	r11
- 81a:	af 90       	pop	r10
- 81c:	08 95       	ret
+ 7e4:	81 e0       	ldi	r24, 0x01	; 1
+ 7e6:	df 91       	pop	r29
+ 7e8:	cf 91       	pop	r28
+ 7ea:	1f 91       	pop	r17
+ 7ec:	0f 91       	pop	r16
+ 7ee:	ff 90       	pop	r15
+ 7f0:	ef 90       	pop	r14
+ 7f2:	df 90       	pop	r13
+ 7f4:	cf 90       	pop	r12
+ 7f6:	bf 90       	pop	r11
+ 7f8:	af 90       	pop	r10
+ 7fa:	08 95       	ret
 
-0000081e <_exit>:
- 81e:	f8 94       	cli
+000007fc <_exit>:
+ 7fc:	f8 94       	cli
 
-00000820 <__stop_program>:
- 820:	ff cf       	rjmp	.-2      	; 0x820 <__stop_program>
+000007fe <__stop_program>:
+ 7fe:	ff cf       	rjmp	.-2      	; 0x7fe <__stop_program>

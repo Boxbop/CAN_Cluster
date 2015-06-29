@@ -115,7 +115,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x822
+.text           0x00000000      0x800
  *(.vectors)
  .vectors       0x00000000       0x94 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtcan128.o
                 0x00000000                __vectors
@@ -206,35 +206,35 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
                 0x000000c2                __vector_16
                 0x000000c2                __vector_18
                 0x000000c2                __vector_20
- .text          0x000000c6       0x6a main.o
+ .text          0x000000c6       0x48 main.o
                 0x000000e4                breakPoint
                 0x000000d6                testPoint
                 0x000000e8                main
                 0x000000c6                initPort
- .text          0x00000130       0xa8 usartLib.o
-                0x000001be                usart0_transmit_string
-                0x0000016a                usart1_transmit_string
-                0x00000130                usart1_init
-                0x000001ae                usart0_transmit
-                0x0000014c                usart1_receive
-                0x000001a0                usart0_receive
-                0x0000015a                usart1_transmit
-                0x00000184                usart0_init
- .text          0x000001d8      0x646 mycanlib.o
-                0x000003b0                can_int_rx_set
-                0x000001d8                can_init
-                0x0000055e                can_rx_set
-                0x000002a2                can_tx
-                0x000006b6                can_rx
- .text          0x0000081e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
-                0x0000081e                . = ALIGN (0x2)
+ .text          0x0000010e       0xa8 usartLib.o
+                0x0000019c                usart0_transmit_string
+                0x00000148                usart1_transmit_string
+                0x0000010e                usart1_init
+                0x0000018c                usart0_transmit
+                0x0000012a                usart1_receive
+                0x0000017e                usart0_receive
+                0x00000138                usart1_transmit
+                0x00000162                usart0_init
+ .text          0x000001b6      0x646 mycanlib.o
+                0x0000038e                can_int_rx_set
+                0x000001b6                can_init
+                0x0000053c                can_rx_set
+                0x00000280                can_tx
+                0x00000694                can_rx
+ .text          0x000007fc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x000007fc                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x0000081e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
-                0x0000081e                . = ALIGN (0x2)
+ .text.libgcc   0x000007fc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x000007fc                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000081e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
-                0x0000081e                exit
-                0x0000081e                _exit
+ .fini9         0x000007fc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x000007fc                exit
+                0x000007fc                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -253,11 +253,11 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000081e        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .fini0         0x000007fc        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000822                _etext = .
+                0x00000800                _etext = .
 
-.data           0x00800100      0x252 load address 0x00000822
+.data           0x00800100      0x252 load address 0x00000800
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtcan128.o
@@ -288,8 +288,8 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  *(.bss*)
  *(COMMON)
                 0x00800352                PROVIDE (__bss_end, .)
-                0x00000822                __data_load_start = LOADADDR (.data)
-                0x00000a74                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000800                __data_load_start = LOADADDR (.data)
+                0x00000a52                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800352        0x0
                 0x00800352                PROVIDE (__noinit_start, .)
@@ -366,24 +366,24 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  .debug_pubnames
                 0x0000012b       0x57 mycanlib.o
 
-.debug_info     0x00000000      0x61b
+.debug_info     0x00000000      0x6a1
  *(.debug_info)
- .debug_info    0x00000000      0x1b1 main.o
- .debug_info    0x000001b1      0x19d usartLib.o
- .debug_info    0x0000034e      0x2cd mycanlib.o
+ .debug_info    0x00000000      0x237 main.o
+ .debug_info    0x00000237      0x19d usartLib.o
+ .debug_info    0x000003d4      0x2cd mycanlib.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x313
+.debug_abbrev   0x00000000      0x360
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0xde main.o
- .debug_abbrev  0x000000de       0xe6 usartLib.o
- .debug_abbrev  0x000001c4      0x14f mycanlib.o
+ .debug_abbrev  0x00000000      0x12b main.o
+ .debug_abbrev  0x0000012b       0xe6 usartLib.o
+ .debug_abbrev  0x00000211      0x14f mycanlib.o
 
-.debug_line     0x00000000      0x7b5
+.debug_line     0x00000000      0x842
  *(.debug_line)
- .debug_line    0x00000000      0x109 main.o
- .debug_line    0x00000109      0x19f usartLib.o
- .debug_line    0x000002a8      0x50d mycanlib.o
+ .debug_line    0x00000000      0x196 main.o
+ .debug_line    0x00000196      0x19f usartLib.o
+ .debug_line    0x00000335      0x50d mycanlib.o
 
 .debug_frame    0x00000000      0x140
  *(.debug_frame)
@@ -391,13 +391,13 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  .debug_frame   0x00000050       0x90 usartLib.o
  .debug_frame   0x000000e0       0x60 mycanlib.o
 
-.debug_str      0x00000000      0x1d4
+.debug_str      0x00000000      0x211
  *(.debug_str)
- .debug_str     0x00000000       0xc1 main.o
-                                 0xfa (size before relaxing)
- .debug_str     0x000000c1       0x92 usartLib.o
+ .debug_str     0x00000000       0xfe main.o
+                                0x13d (size before relaxing)
+ .debug_str     0x000000fe       0x92 usartLib.o
                                 0x139 (size before relaxing)
- .debug_str     0x00000153       0x81 mycanlib.o
+ .debug_str     0x00000190       0x81 mycanlib.o
                                 0x128 (size before relaxing)
 
 .debug_loc      0x00000000      0x413
@@ -411,5 +411,6 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
 OUTPUT(CanTest.elf elf32-avr)
 LOAD linker stubs
 
-.debug_ranges   0x00000000       0x30
- .debug_ranges  0x00000000       0x30 usartLib.o
+.debug_ranges   0x00000000       0x78
+ .debug_ranges  0x00000000       0x48 main.o
+ .debug_ranges  0x00000048       0x30 usartLib.o
